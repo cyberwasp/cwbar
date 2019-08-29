@@ -1,0 +1,847 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<server xmlns="urn:jboss:domain:2.2">
+
+    <extensions>
+        <extension module="org.jboss.as.clustering.infinispan"/>
+        <extension module="org.jboss.as.connector"/>
+        <extension module="org.jboss.as.deployment-scanner"/>
+        <extension module="org.jboss.as.ee"/>
+        <extension module="org.jboss.as.ejb3"/>
+        <extension module="org.jboss.as.jacorb"/>
+        <extension module="org.jboss.as.jaxrs"/>
+        <extension module="org.jboss.as.jdr"/>
+        <extension module="org.jboss.as.jmx"/>
+        <extension module="org.jboss.as.jpa"/>
+        <extension module="org.jboss.as.jsf"/>
+        <extension module="org.jboss.as.jsr77"/>
+        <extension module="org.jboss.as.logging"/>
+        <extension module="org.jboss.as.mail"/>
+        <extension module="org.jboss.as.messaging"/>
+        <extension module="org.jboss.as.naming"/>
+        <extension module="org.jboss.as.pojo"/>
+        <extension module="org.jboss.as.remoting"/>
+        <extension module="org.jboss.as.sar"/>
+        <extension module="org.jboss.as.security"/>
+        <extension module="org.jboss.as.transactions"/>
+        <extension module="org.jboss.as.webservices"/>
+        <extension module="org.jboss.as.weld"/>
+        <extension module="org.wildfly.extension.batch"/>
+        <extension module="org.wildfly.extension.io"/>
+        <extension module="org.wildfly.extension.undertow"/>
+        <extension module="org.switchyard"/>
+    </extensions>
+
+    <system-properties>
+        <property name="ru.krista.login.auth-profile" value="file:///home/orlov/Krista/compile/rebudget/config/auth-profile.properties"/>
+        <property name="ru.krista.core.dataaccess.splitJS" value="true"/>
+        <property name="ru.krista.jca.provider" value="BC"/>
+        <property name="ru.krista.dsign.verify.revocationEnabled" value="true"/>
+        <property name="birt.viewer.working.reports.path" value="/home/orlov/Krista/compile/rebudget/templates"/>
+        <property name="ru.krista.core.event.config.default" value=""/>
+        <property name="ru.krista.core.event.printhandlers" value="false"/>
+        <property name="org.apache.tomcat.util.http.Parameters.MAX_COUNT" value="10000"/>
+        <property name="org.apache.coyote.http11.DEFAULT_CONNECTION_TIMEOUT" value="3600000"/>
+        <property name="org.apache.coyote.ajp.DEFAULT_CONNECTION_TIMEOUT" value="3600000"/>
+        <property name="javax.xml.transform.TransformerFactory" value="org.apache.xalan.processor.TransformerFactoryImpl"/>
+        <property name="ru.krista.core.dataaccess.syncAppCache" value="true"/>
+        <property name="krista.hibernate.attachments.store.path" value="/home/orlov/Krista/compile/rebudget/attachments"/>
+        <property name="ru.krista.core.dataaccess.facade.usehttp" value="false"/>
+        <property name="ru.krista.core.dataaccess.facade.url" value="http://localhost:8080/dataaccess/"/>
+        <property name="ru.krista.core.dataaccess.facade.http.attempts" value="3"/>
+        <property name="ru.krista.core.dataaccess.facade.http.timeout" value="120000"/>
+        <property name="ru.krista.server.name" value="Test"/>
+        <property name="default-server-config" value="localhost-jboss"/>
+        <property name="ru.krista.core.olap.schema_dir" value="/home/orlov/Krista/compile/rebudget/resources/olap"/>
+        <property name="ru.krista.core.reloadable.dir" value="/home/orlov/Krista/compile/rebudget/resources/reloadable"/>
+        <property name="ru.krista.tools.windows" value="/home/orlov/Krista/compile/rebudget/tools/windows"/>
+        <property name="ru.krista.tools.smsconfig" value="/home/orlov/Krista/compile/rebudget/templates/sms"/>
+        <property name="ru.krista.session.serialization.checking" value="false"/>
+        <property name="ru.krista.web.login" value="false"/>
+        <property name="ru.krista.security.password-validation" value="no"/>
+        <property name="ru.krista.resources.expand.dir" value="/home/orlov/Krista/compile/rebudget/resources/expand"/>
+        <property name="ru.krista.core.WebResourceExpires.Minutes" value="480"/>
+        <property name="krista.webadmin.mail.activation" value="/home/orlov/Krista/compile/rebudget/templates/mail/activation.mail.txt"/>
+        <property name="krista.webadmin.mail.login" value="/home/orlov/Krista/compile/rebudget/templates/mail/login.mail.txt"/>
+        <property name="krista.webadmin.mail.apphost" value="localhost:8080"/>
+        <property name="krista.webadmin.mail.replyto" value="rphelp@krista.ru"/>
+        <property name="krista.webadmin.protocol.name" value="http://"/>
+        <property name="ru.krista.openfire.transport" value="websocket"/>
+        <property name="ru.krista.openfire.bosh.internal.url" value="http://localhost:7070/http-bind/"/>
+        <property name="ru.krista.openfire.websocket.internal.url" value="ws://localhost:7070/ws/"/>
+        <property name="ru.krista.openfire.rest.internal.url" value="http://localhost:9000/"/>
+        <property name="ru.krista.openfire.rest.secret" value="EEVh9qc344FzuNgL"/>
+        <property name="ru.krista.auth.user-manager.authentication" value="Basic dXNlci1tYW5hZ2VyOlhuQ3EzV3g4aXZBTDlUdnNZWmw4"/>
+        <property name="ru.krista.core.jobQueue.concurrentJobCount" value="2"/>
+        <property name="ru.krista.core.jobQueue.jobServerAddress" value="http://localhost:8080"/>
+        <property name="ru.krista.queue.authentication" value="Basic cmVtb3RlLXNlcnZpY2U6cmVtb3RlLXNlcnZpY2U="/>
+        <property name="ru.krista.core.fileserver.webdavfs.folder" value="/home/orlov/Krista/compile/rebudget/file-store"/>
+        <property name="ru.krista.core.fileserver.webdavfs.url" value="http://localhost:8080/webdav-fs/"/>
+        <property name="krista.rebudget.birt.reversehost" value="localhost:8080"/>
+        <property name="ru.krista.retools.func_role.information_system" value="ИСП"/>
+        <property name="ru.krista.retools.func_role.local_admin" value="ИСП.АДМ"/>
+        <property name="ru.krista.core.dataaccess.registry.disableStats" value="true"/>
+        <property name="ru.krista.jca.timestamp.server" value="http://www.cryptopro.ru/tsp/tsp.srf"/>
+    </system-properties>
+
+
+    <management>
+        <security-realms>
+            <security-realm name="ManagementRealm">
+                <authentication>
+                    <local default-user="$local" skip-group-loading="true"/>
+                    <properties path="mgmt-users.properties" relative-to="jboss.server.config.dir"/>
+                </authentication>
+                <authorization map-groups-to-roles="false">
+                    <properties path="mgmt-groups.properties" relative-to="jboss.server.config.dir"/>
+                </authorization>
+            </security-realm>
+            <security-realm name="ApplicationRealm">
+                <authentication>
+                    <local default-user="$local" allowed-users="*" skip-group-loading="true"/>
+                    <jaas name="krista"/>
+                </authentication>
+                <authorization>
+                    <properties path="application-roles.properties" relative-to="jboss.server.config.dir"/>
+                </authorization>
+            </security-realm>
+        </security-realms>
+        <audit-log>
+            <formatters>
+                <json-formatter name="json-formatter"/>
+            </formatters>
+            <handlers>
+                <file-handler name="file" formatter="json-formatter" path="audit-log.log" relative-to="jboss.server.data.dir"/>
+            </handlers>
+            <logger log-boot="true" log-read-only="false" enabled="false">
+                <handlers>
+                    <handler name="file"/>
+                </handlers>
+            </logger>
+        </audit-log>
+        <management-interfaces>
+            <http-interface security-realm="ManagementRealm" http-upgrade-enabled="true">
+                <socket-binding http="management-http"/>
+            </http-interface>
+        </management-interfaces>
+        <access-control provider="simple">
+            <role-mapping>
+                <role name="SuperUser">
+                    <include>
+                        <user name="$local"/>
+                    </include>
+                </role>
+            </role-mapping>
+        </access-control>
+    </management>
+
+    <profile>
+        <subsystem xmlns="urn:jboss:domain:logging:2.0">
+            <async-handler name="ASYNC_FILE">
+                <level name="INFO"/>
+                <queue-length value="512"/>
+                <overflow-action value="discard"/>
+                <subhandlers>
+                    <handler name="FILE_SIZE"/>
+                    <handler name="CONSOLE"/>
+                </subhandlers>
+            </async-handler>
+            <console-handler name="CONSOLE">
+                <formatter>
+                    <named-formatter name="PATTERN"/>
+                </formatter>
+            </console-handler>
+            <file-handler name="selector.log" autoflush="false">
+                <level name="ALL"/>
+                <file relative-to="jboss.server.log.dir" path="selector.log"/>
+                <append value="false"/>
+            </file-handler>
+            <file-handler name="live_url" autoflush="true">
+                <level name="ALL"/>
+                <file relative-to="jboss.server.log.dir" path="live_url.log"/>
+                <append value="false"/>
+            </file-handler>
+            <custom-handler name="FILE_SIZE" class="org.jboss.logmanager.handlers.PeriodicSizeRotatingFileHandler" module="org.jboss.logmanager">
+                <formatter>
+                    <pattern-formatter pattern="%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p [%c] (%t) %s%E%n"/>
+                </formatter>
+                <properties>
+                    <property name="append" value="true"/>
+                    <property name="suffix" value=".yyyy-MM-dd"/>
+                    <property name="autoFlush" value="true"/>
+                    <property name="fileName" value="${jboss.server.log.dir}/server.log"/>
+                    <property name="maxBackupIndex" value="10000"/>
+                    <property name="rotateSize" value="10000000"/>
+                </properties>
+            </custom-handler>
+            <periodic-rotating-file-handler name="FILE" autoflush="true">
+                <formatter>
+                    <named-formatter name="PATTERN"/>
+                </formatter>
+                <file relative-to="jboss.server.log.dir" path="server.log"/>
+                <suffix value=".yyyy-MM-dd"/>
+                <append value="true"/>
+            </periodic-rotating-file-handler>
+            <logger category="com.arjuna">
+                <level name="WARN"/>
+            </logger>
+            <logger category="org.apache.tomcat.util.modeler">
+                <level name="WARN"/>
+            </logger>
+            <logger category="org.jboss.as.config">
+                <level name="DEBUG"/>
+            </logger>
+            <logger category="sun.rmi">
+                <level name="WARN"/>
+            </logger>
+            <logger category="jacorb">
+                <level name="WARN"/>
+            </logger>
+            <logger category="jacorb.config">
+                <level name="ERROR"/>
+            </logger>
+            <logger category="org.switchyard">
+                <level name="INFO"/>
+            </logger>
+            <logger category="org.apache.deltaspike.core.api.provider.BeanManagerProvider">
+                <level name="ERROR"/>
+            </logger>
+            <logger category="org.hibernate.SQL" use-parent-handlers="true">
+                <level name="INFO"/>
+            </logger>
+            <logger category="org.hibernate.type.descriptor.sql.BasicBinder" use-parent-handlers="true">
+                <level name="INFO"/>
+            </logger>
+            <logger category="ru.krista.UnifiedLogger">
+                <level name="OFF"/>
+            </logger>
+            <logger category="org.hibernate.engine.internal.StatefulPersistenceContext">
+                <level name="OFF"/>
+            </logger>
+            <logger category="org.apache.cxf">
+                <level name="ERROR"/>
+            </logger>
+            <logger category="ru.krista.core.reporting.datasource">
+                <level name="WARNING"/>
+            </logger>
+            <logger category="ru.krista.core.security.beans.AuthorityProviderBean">
+                <level name="WARNING"/>
+            </logger>
+            <logger category="uk.co.spudsoft.birt.emitters.excel">
+                <level name="WARNING"/>
+            </logger>
+            <logger category="org.eclipse.birt.report.engine.layout.pdf.font.FontConfigReader">
+                <level name="WARNING"/>
+            </logger>
+            <logger category="ru.krista.core.dsign.jcp.controllers.VerifySignJCPController">
+                <level name="WARNING"/>
+            </logger>
+            <logger category="ru.krista.consolidation.controller.SignChecker">
+                <level name="WARNING"/>
+            </logger>
+            <logger category="org.xnio.nio.selector" use-parent-handlers="false">
+                <level name="ALL"/>
+                <handlers>
+                    <handler name="selector.log"/>
+                </handlers>
+            </logger>
+            <logger category="com.arjuna.ats.jta" use-parent-handlers="true">
+                <level name="OFF"/>
+            </logger>
+            <logger category="ru.krista.retools.gui.forms.admin.ActiveSessionListener" use-parent-handlers="false">
+                <level name="ALL"/>
+                <handlers>
+                    <handler name="live_url"/>
+                </handlers>
+            </logger>
+            <logger category="ru.krista.core.fileserver.webdavfs.FsResourceExt">
+                <level name="OFF"/>
+            </logger>
+            <root-logger>
+                <level name="INFO"/>
+                <handlers>
+                    <handler name="ASYNC_FILE"/>
+                </handlers>
+            </root-logger>
+            <formatter name="PATTERN">
+                <pattern-formatter pattern="%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p [%c] (%t) %s%E%n"/>
+            </formatter>
+            <formatter name="COLOR-PATTERN">
+                <pattern-formatter pattern="%K{level}%d{HH:mm:ss,SSS} %-5p [%c] (%t) %s%E%n"/>
+            </formatter>
+        </subsystem>
+        <subsystem xmlns="urn:jboss:domain:batch:1.0">
+            <job-repository>
+                <in-memory/>
+            </job-repository>
+            <thread-pool>
+                <max-threads count="10"/>
+                <keepalive-time time="30" unit="seconds"/>
+            </thread-pool>
+        </subsystem>
+        <subsystem xmlns="urn:jboss:domain:datasources:2.0">
+            <datasources>
+                <datasource jndi-name="java:jboss/datasources/ExampleDS" pool-name="ExampleDS" enabled="true" use-java-context="true">
+                    <connection-url>jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE</connection-url>
+                    <driver>h2</driver>
+                    <security>
+                        <user-name>sa</user-name>
+                        <password>sa</password>
+                    </security>
+                </datasource>
+                <datasource jta="true" jndi-name="java:/jdbc/dataaccess" pool-name="DataaccessDS" enabled="true" use-ccm="false">
+                    <connection-url>jdbc:postgresql://172.17.14.19:5432/rebudget_mo3</connection-url>
+                    <driver-class>org.postgresql.Driver</driver-class>
+                    <driver>postgresql-42.0.0.jar</driver>
+                    <pool>
+                        <min-pool-size>1</min-pool-size>
+                        <max-pool-size>30</max-pool-size>
+                        <allow-multiple-users>false</allow-multiple-users>
+                    </pool>
+                    <security>
+                        <user-name>sysdba</user-name>
+                        <password>masterkey</password>
+                    </security>
+                    <validation>
+                        <check-valid-connection-sql>SELECT 1</check-valid-connection-sql>
+                        <validate-on-match>true</validate-on-match>
+                        <background-validation>false</background-validation>
+                    </validation>
+                    <statement>
+                        <share-prepared-statements>false</share-prepared-statements>
+                    </statement>
+                </datasource>
+                <datasource jta="false" jndi-name="java:/jdbc/dataaccess-nontx" pool-name="DataaccessDS-nontx" enabled="true" use-ccm="false">
+                    <connection-url>jdbc:postgresql://172.17.14.19:5432/rebudget_mo3</connection-url>
+                    <driver-class>org.postgresql.Driver</driver-class>
+                    <driver>postgresql-42.0.0.jar</driver>
+                    <pool>
+                        <min-pool-size>1</min-pool-size>
+                        <max-pool-size>30</max-pool-size>
+                        <allow-multiple-users>false</allow-multiple-users>
+                    </pool>
+                    <security>
+                        <user-name>sysdba</user-name>
+                        <password>masterkey</password>
+                    </security>
+                    <validation>
+                        <check-valid-connection-sql>SELECT 1</check-valid-connection-sql>
+                        <validate-on-match>true</validate-on-match>
+                        <background-validation>false</background-validation>
+                    </validation>
+                    <statement>
+                        <share-prepared-statements>false</share-prepared-statements>
+                    </statement>
+                </datasource>
+                <drivers>
+                    <driver name="h2" module="com.h2database.h2">
+                        <xa-datasource-class>org.h2.jdbcx.JdbcDataSource</xa-datasource-class>
+                    </driver>
+                </drivers>
+            </datasources>
+        </subsystem>
+        <subsystem xmlns="urn:jboss:domain:deployment-scanner:2.0">
+            <deployment-scanner path="deployments" relative-to="jboss.server.base.dir" scan-interval="5000" deployment-timeout="3600"/>
+        </subsystem>
+        <subsystem xmlns="urn:jboss:domain:ee:2.0">
+            <spec-descriptor-property-replacement>true</spec-descriptor-property-replacement>
+            <concurrent>
+                <context-services>
+                    <context-service name="default" jndi-name="java:jboss/ee/concurrency/context/default" use-transaction-setup-provider="true"/>
+                </context-services>
+                <managed-thread-factories>
+                    <managed-thread-factory name="default" jndi-name="java:jboss/ee/concurrency/factory/default" context-service="default"/>
+                </managed-thread-factories>
+                <managed-executor-services>
+                    <managed-executor-service name="default" jndi-name="java:jboss/ee/concurrency/executor/default" context-service="default" hung-task-threshold="60000" core-threads="150" max-threads="150" keepalive-time="5000" queue-length="10000"/>
+                    <managed-executor-service name="report" jndi-name="java:jboss/ee/concurrency/executor/report" context-service="default" hung-task-threshold="60000" core-threads="5" max-threads="25" keepalive-time="5000" queue-length="10000"/>
+                </managed-executor-services>
+                <managed-scheduled-executor-services>
+                    <managed-scheduled-executor-service name="default" jndi-name="java:jboss/ee/concurrency/scheduler/default" context-service="default" hung-task-threshold="60000" core-threads="2" keepalive-time="3000"/>
+                </managed-scheduled-executor-services>
+            </concurrent>
+            <default-bindings context-service="java:jboss/ee/concurrency/context/default" datasource="java:jboss/datasources/ExampleDS" jms-connection-factory="java:jboss/DefaultJMSConnectionFactory" managed-executor-service="java:jboss/ee/concurrency/executor/default" managed-scheduled-executor-service="java:jboss/ee/concurrency/scheduler/default" managed-thread-factory="java:jboss/ee/concurrency/factory/default"/>
+        </subsystem>
+        <subsystem xmlns="urn:jboss:domain:ejb3:2.0">
+            <session-bean>
+                <stateful default-access-timeout="5000" cache-ref="simple" passivation-disabled-cache-ref="simple"/>
+                <singleton default-access-timeout="5000"/>
+            </session-bean>
+            <mdb>
+                <resource-adapter-ref resource-adapter-name="${ejb.resource-adapter-name:hornetq-ra.rar}"/>
+                <bean-instance-pool-ref pool-name="mdb-strict-max-pool"/>
+            </mdb>
+            <pools>
+                <bean-instance-pools>
+                    <strict-max-pool name="slsb-strict-max-pool" max-pool-size="20" instance-acquisition-timeout="5" instance-acquisition-timeout-unit="MINUTES"/>
+                    <strict-max-pool name="mdb-strict-max-pool" max-pool-size="20" instance-acquisition-timeout="5" instance-acquisition-timeout-unit="MINUTES"/>
+                </bean-instance-pools>
+            </pools>
+            <caches>
+                <cache name="simple"/>
+                <cache name="distributable" passivation-store-ref="infinispan" aliases="passivating clustered"/>
+            </caches>
+            <passivation-stores>
+                <passivation-store name="infinispan" cache-container="ejb" max-size="10000"/>
+            </passivation-stores>
+            <async thread-pool-name="default"/>
+            <timer-service thread-pool-name="default" default-data-store="default-file-store">
+                <data-stores>
+                    <file-data-store name="default-file-store" path="timer-service-data" relative-to="jboss.server.data.dir"/>
+                </data-stores>
+            </timer-service>
+            <remote connector-ref="http-remoting-connector" thread-pool-name="default"/>
+            <thread-pools>
+                <thread-pool name="default">
+                    <max-threads count="10"/>
+                    <keepalive-time time="100" unit="milliseconds"/>
+                </thread-pool>
+            </thread-pools>
+            <iiop enable-by-default="false" use-qualified-name="false"/>
+            <default-security-domain value="krista"/>
+            <default-missing-method-permissions-deny-access value="true"/>
+            <statistics enabled="false"/>
+        </subsystem>
+        <subsystem xmlns="urn:jboss:domain:io:1.1">
+            <worker name="default" io-threads="20" task-max-threads="20"/>
+            <worker name="webservice" io-threads="3" task-max-threads="3"/>
+            <buffer-pool name="default"/>
+        </subsystem>
+        <subsystem xmlns="urn:jboss:domain:infinispan:2.0">
+            <cache-container name="web" default-cache="passivation" module="org.wildfly.clustering.web.infinispan" statistics-enabled="false">
+                <local-cache name="passivation" batching="true" statistics-enabled="false">
+                    <locking isolation="READ_COMMITTED"/>
+                    <transaction locking="OPTIMISTIC"/>
+                </local-cache>
+                <local-cache name="persistent" batching="true" statistics-enabled="false">
+                    <file-store passivation="false" purge="false"/>
+                </local-cache>
+            </cache-container>
+            <cache-container name="ejb" default-cache="passivation" module="org.wildfly.clustering.ejb.infinispan" statistics-enabled="false" aliases="sfsb">
+                <local-cache name="passivation" batching="true" statistics-enabled="false">
+                    <file-store passivation="true" purge="false"/>
+                </local-cache>
+                <local-cache name="persistent" batching="true" statistics-enabled="false">
+                    <file-store passivation="false" purge="false"/>
+                </local-cache>
+            </cache-container>
+            <cache-container name="hibernate" default-cache="local-query" module="org.hibernate" statistics-enabled="false">
+                <local-cache name="entity" statistics-enabled="false">
+                    <transaction mode="NON_XA"/>
+                    <eviction strategy="LRU" max-entries="10000"/>
+                    <expiration max-idle="100000"/>
+                </local-cache>
+                <local-cache name="local-query" statistics-enabled="false">
+                    <transaction mode="NONE"/>
+                    <eviction strategy="LRU" max-entries="10000"/>
+                    <expiration max-idle="100000"/>
+                </local-cache>
+                <local-cache name="timestamps" statistics-enabled="false">
+                    <transaction mode="NONE"/>
+                    <eviction strategy="NONE"/>
+                </local-cache>
+            </cache-container>
+            <cache-container name="krista" default-cache="sequence-cache" statistics-enabled="false">
+                <local-cache name="entity-lock-cache" start="EAGER" statistics-enabled="false">
+                    <locking isolation="READ_UNCOMMITTED" striping="false" acquire-timeout="500" concurrency-level="1000"/>
+                    <expiration max-idle="-1" lifespan="10800000" interval="60000"/>
+                </local-cache>
+                <local-cache name="sequence-cache" start="EAGER" statistics-enabled="false">
+                    <transaction mode="FULL_XA" locking="PESSIMISTIC"/>
+                </local-cache>
+            </cache-container>
+            <cache-container name="rebudget" default-cache="rebudget">
+                <local-cache name="bean-lock" start="EAGER"/>
+                <local-cache name="rebudget" start="EAGER"/>
+                <local-cache name="request-lock" start="EAGER"/>
+            </cache-container>
+            <cache-container name="retools">
+                <local-cache name="ws-queue"/>
+            </cache-container>
+        </subsystem>
+        <subsystem xmlns="urn:jboss:domain:jacorb:1.3">
+            <orb socket-binding="jacorb" ssl-socket-binding="jacorb-ssl">
+                <initializers security="identity" transactions="spec"/>
+            </orb>
+        </subsystem>
+        <subsystem xmlns="urn:jboss:domain:jaxrs:1.0"/>
+        <subsystem xmlns="urn:jboss:domain:jca:2.0">
+            <archive-validation enabled="true" fail-on-error="true" fail-on-warn="false"/>
+            <bean-validation enabled="true"/>
+            <default-workmanager>
+                <short-running-threads>
+                    <core-threads count="50"/>
+                    <queue-length count="50"/>
+                    <max-threads count="50"/>
+                    <keepalive-time time="10" unit="seconds"/>
+                </short-running-threads>
+                <long-running-threads>
+                    <core-threads count="50"/>
+                    <queue-length count="50"/>
+                    <max-threads count="50"/>
+                    <keepalive-time time="10" unit="seconds"/>
+                </long-running-threads>
+            </default-workmanager>
+            <cached-connection-manager/>
+        </subsystem>
+        <subsystem xmlns="urn:jboss:domain:jdr:1.0"/>
+        <subsystem xmlns="urn:jboss:domain:jmx:1.3">
+            <expose-resolved-model/>
+            <expose-expression-model/>
+            <remoting-connector use-management-endpoint="true"/>
+        </subsystem>
+        <subsystem xmlns="urn:jboss:domain:jpa:1.1">
+            <jpa default-datasource="" default-extended-persistence-inheritance="DEEP"/>
+        </subsystem>
+        <subsystem xmlns="urn:jboss:domain:jsf:1.0"/>
+        <subsystem xmlns="urn:jboss:domain:jsr77:1.0"/>
+        <subsystem xmlns="urn:jboss:domain:mail:2.0">
+            <mail-session name="default" jndi-name="java:jboss/mail/Default">
+                <smtp-server outbound-socket-binding-ref="mail-smtp"/>
+            </mail-session>
+            <mail-session name="java:/mail/krista" jndi-name="java:/mail/krista" from="cons-admin@krista.ru">
+                <smtp-server outbound-socket-binding-ref="mail-krista"/>
+            </mail-session>
+        </subsystem>
+        <subsystem xmlns="urn:jboss:domain:messaging:2.0">
+            <hornetq-server>
+                <persistence-enabled>true</persistence-enabled>
+                <security-domain>krista</security-domain>
+                <security-enabled>false</security-enabled>
+                <statistics-enabled>false</statistics-enabled>
+                <journal-file-size>10485760</journal-file-size>
+
+                <connectors>
+                    <http-connector name="http-connector" socket-binding="http">
+                        <param key="http-upgrade-endpoint" value="http-acceptor"/>
+                    </http-connector>
+                    <http-connector name="http-connector-throughput" socket-binding="http">
+                        <param key="http-upgrade-endpoint" value="http-acceptor-throughput"/>
+                        <param key="batch-delay" value="50"/>
+                    </http-connector>
+                    <in-vm-connector name="in-vm" server-id="0"/>
+                </connectors>
+
+                <acceptors>
+                    <http-acceptor http-listener="default" name="http-acceptor"/>
+                    <http-acceptor http-listener="default" name="http-acceptor-throughput">
+                        <param key="batch-delay" value="50"/>
+                        <param key="direct-deliver" value="false"/>
+                    </http-acceptor>
+                    <in-vm-acceptor name="in-vm" server-id="0"/>
+                </acceptors>
+
+                <security-settings>
+                    <security-setting match="#">
+                        <permission type="send" roles="system"/>
+                        <permission type="consume" roles="system"/>
+                        <permission type="createNonDurableQueue" roles="system"/>
+                        <permission type="deleteNonDurableQueue" roles="system"/>
+                    </security-setting>
+                </security-settings>
+
+                <address-settings>
+                    <address-setting match="#">
+                        <dead-letter-address>jms.queue.DLQ</dead-letter-address>
+                        <page-size-bytes>2097152</page-size-bytes>
+                        <message-counter-history-day-limit>10</message-counter-history-day-limit>
+                    </address-setting>
+                    <address-setting match="jms.JobRequest">
+                        <expiry-address>jms.queue.ExpiryQueue</expiry-address>
+                        <max-size-bytes>209715200</max-size-bytes>
+                    </address-setting>
+                    <address-setting match="jms.JobResponce">
+                        <max-size-bytes>209715200</max-size-bytes>
+                    </address-setting>
+                </address-settings>
+
+                <jms-connection-factories>
+                    <connection-factory name="InVmConnectionFactory">
+                        <connectors>
+                            <connector-ref connector-name="in-vm"/>
+                        </connectors>
+                        <entries>
+                            <entry name="java:/ConnectionFactory"/>
+                        </entries>
+                        <consumer-window-size>0</consumer-window-size>
+                    </connection-factory>
+                    <connection-factory name="RemoteConnectionFactory">
+                        <connectors>
+                            <connector-ref connector-name="http-connector"/>
+                        </connectors>
+                        <entries>
+                            <entry name="java:jboss/exported/jms/RemoteConnectionFactory"/>
+                        </entries>
+                        <consumer-window-size>0</consumer-window-size>
+                    </connection-factory>
+                    <connection-factory name="jms/RefreshTopicConnectionFactory">
+                        <connectors>
+                            <connector-ref connector-name="in-vm"/>
+                        </connectors>
+                        <entries>
+                            <entry name="java:/jms/RefreshTopicConnectionFactory"/>
+                        </entries>
+                        <consumer-window-size>0</consumer-window-size>
+                        <failover-on-initial-connection>false</failover-on-initial-connection>
+                        <failover-on-server-shutdown>false</failover-on-server-shutdown>
+                        <use-global-pools>true</use-global-pools>
+                    </connection-factory>
+                    <pooled-connection-factory name="hornetq-ra">
+                        <transaction mode="xa"/>
+                        <connectors>
+                            <connector-ref connector-name="in-vm"/>
+                        </connectors>
+                        <entries>
+                            <entry name="java:/JmsXA"/>
+                            <entry name="java:jboss/DefaultJMSConnectionFactory"/>
+                        </entries>
+                        <consumer-window-size>0</consumer-window-size>
+                    </pooled-connection-factory>
+                </jms-connection-factories>
+
+                <jms-destinations>
+                    <jms-queue name="DLQ">
+                        <entry name="java:/jms/queue/DLQ"/>
+                    </jms-queue>
+                    <jms-queue name="JobRequest">
+                        <entry name="java:/jms/JobRequest"/>
+                        <durable>true</durable>
+                    </jms-queue>
+                    <jms-queue name="ExpiryQueue">
+                        <entry name="java:/jms/ExpiryQueue"/>
+                        <durable>false</durable>
+                    </jms-queue>
+                    <jms-queue name="FileUploadQueue">
+                        <entry name="java:/jms/queue/FileUploadQueue"/>
+                        <durable>true</durable>
+                    </jms-queue>
+                    <jms-queue name="FileUploadQueueResponse">
+                        <entry name="java:/jms/queue/FileUploadQueueResponse"/>
+                        <durable>true</durable>
+                    </jms-queue>
+                    <jms-queue name="JobResponce">
+                        <entry name="java:/jms/JobResponce"/>
+                        <durable>true</durable>
+                    </jms-queue>
+                    <jms-topic name="RefreshMetaCache">
+                        <entry name="java:/jms/RefreshMetaCache"/>
+                    </jms-topic>
+                    <jms-topic name="SimpleBus">
+                        <entry name="java:/jms/topic/SimpleBus"/>
+                    </jms-topic>
+                    <jms-topic name="NotificationDispatcher">
+                        <entry name="java:/jms/NotificationDispatcher"/>
+                    </jms-topic>
+                </jms-destinations>
+            </hornetq-server>
+        </subsystem>
+        <subsystem xmlns="urn:jboss:domain:naming:2.0">
+            <remote-naming/>
+        </subsystem>
+        <subsystem xmlns="urn:jboss:domain:pojo:1.0"/>
+        <subsystem xmlns="urn:jboss:domain:remoting:2.0">
+            <endpoint worker="default"/>
+            <http-connector name="http-remoting-connector" connector-ref="default" security-realm="ApplicationRealm"/>
+        </subsystem>
+        <subsystem xmlns="urn:jboss:domain:resource-adapters:2.0"/>
+        <subsystem xmlns="urn:jboss:domain:sar:1.0"/>
+        <subsystem xmlns="urn:jboss:domain:security:1.2">
+            <security-domains>
+                <security-domain name="other" cache-type="default">
+                    <authentication>
+                        <login-module code="Remoting" flag="optional">
+                            <module-option name="password-stacking" value="useFirstPass"/>
+                        </login-module>
+                        <login-module code="RealmDirect" flag="required">
+                            <module-option name="password-stacking" value="useFirstPass"/>
+                        </login-module>
+                    </authentication>
+                </security-domain>
+                <security-domain name="jboss-web-policy" cache-type="default">
+                    <authorization>
+                        <policy-module code="Delegating" flag="required"/>
+                    </authorization>
+                </security-domain>
+                <security-domain name="jboss-ejb-policy" cache-type="default">
+                    <authorization>
+                        <policy-module code="Delegating" flag="required"/>
+                    </authorization>
+                </security-domain>
+                <security-domain name="bpel-console" cache-type="default">
+                    <authentication>
+                        <login-module code="UsersRoles" flag="required"/>
+                    </authentication>
+                </security-domain>
+                <security-domain name="krista" cache-type="default">
+                    <authentication>
+                        <login-module code="Remoting" flag="optional">
+                            <module-option name="password-stacking" value="useFirstPass"/>
+                        </login-module>
+                        <login-module code="ru.krista.jaas.DataBaseStatiscticLoginModule" flag="optional">
+                            <module-option name="dsJndiName" value="java:/jdbc/dataaccess"/>
+                            <module-option name="statsTable" value="b_loginstats[login,remoteaddr,success,logintime,useragent][id=nextval('hibernate_sequence')]"/>
+                        </login-module>
+                        <login-module code="UsersRoles" flag="sufficient">
+                            <module-option name="unauthenticatedIdentity" value="guest"/>
+                            <module-option name="usersProperties" value="/home/orlov/Krista/compile/rebudget/jboss-bas-8.2.1.krista26/standalone/configuration/krista-users.properties"/>
+                            <module-option name="rolesProperties" value="/home/orlov/Krista/compile/rebudget/jboss-bas-8.2.1.krista26/standalone/configuration/krista-roles.properties"/>
+                            <module-option name="password-stacking" value="useFirstPass"/>
+                        </login-module>
+                        <login-module code="ru.krista.auth.undertow.IdpClientLoginModule" flag="optional">
+                            <module-option name="roles" value="user"/>
+                        </login-module>
+                        <login-module code="ru.krista.jaas.DataBaseExpiryPolicyLoginModule" flag="requisite">
+                            <module-option name="dsJndiName" value="java:/jdbc/dataaccess"/>
+                            <module-option name="selectQuery" value="select lastchangepassdate, disposable_pass, permanent_pass FROM security_principal where name = ?"/>
+                        </login-module>
+                        <login-module code="DatabaseUsers" flag="optional">
+                            <module-option name="unauthenticatedIdentity" value="guest"/>
+                            <module-option name="hashUserPassword" value="true"/>
+                            <module-option name="hashAlgorithm" value="SHA-256"/>
+                            <module-option name="hashEncoding" value="HEX"/>
+                            <module-option name="hashCharset" value="utf-8"/>
+                            <module-option name="dsJndiName" value="java:/jdbc/dataaccess"/>
+                            <module-option name="principalsQuery" value="SELECT p.password FROM security_principal p WHERE p.name = ? and p.isactive and (p.versionstarttime &lt;= now() and p.versionfinaltime > now()) and (p.employee is null or exists(select * from bud_employee e where e.versioning_key = p.employee and e.versionstarttime &lt;= now() and e.versionfinaltime > now()))"/>
+                            <module-option name="rolesQuery" value="SELECT                             DISTINCT role_name,                             roles                         FROM                             (                                 SELECT                                     sp.name as user_name,                                     'Roles' as roles,                                     'user' as role_name                                 FROM                                     security_principal sp                                 UNION                                 SELECT                                     sp.name as user_name,                                     'Roles' as roles,                                     sr.name as role_name                                 FROM                                     security_principalrole spr,                                     security_role sr,                                     security_principal sp                                 WHERE                                     (sr.id = spr.role) and                                     (sp.id = spr.principal)                             ) as u                         WHERE user_name=?"/>
+                            <module-option name="password-stacking" value="useFirstPass"/>
+                        </login-module>
+                    </authentication>
+                </security-domain>
+            </security-domains>
+        </subsystem>
+        <subsystem xmlns="urn:jboss:domain:transactions:2.0">
+            <core-environment>
+                <process-id>
+                    <uuid/>
+                </process-id>
+            </core-environment>
+            <recovery-environment socket-binding="txn-recovery-environment" status-socket-binding="txn-status-manager"/>
+            <coordinator-environment statistics-enabled="false" default-timeout="3600"/>
+        </subsystem>
+        <subsystem xmlns="urn:jboss:domain:undertow:1.2" statistics-enabled="false">
+            <buffer-cache name="default"/>
+            <server name="default-server">
+                <http-listener name="default" socket-binding="http" max-post-size="104857600"/>
+                <host name="default-host" alias="localhost">
+                    <location name="/" handler="welcome-content"/>
+                    <location name="/webservices/*" handler="welcome-content">
+                        <filter-ref name="limit-connections"/>
+                    </location>
+                    <filter-ref name="server-header"/>
+                    <filter-ref name="x-powered-by-header"/>
+                    <single-sign-on path="/"/>
+                </host>
+            </server>
+            <servlet-container name="default" use-listener-encoding="true" default-encoding="UTF-8">
+                <jsp-config/>
+                <websockets/>
+            </servlet-container>
+            <handlers>
+                <file name="welcome-content" path="${jboss.home.dir}/welcome-content"/>
+            </handlers>
+            <filters>
+                <connection-limit name="limit-connections" max-concurrent-requests="2" queue-size="10"/>
+                <response-header name="server-header" header-name="Server" header-value="WildFly/8"/>
+                <response-header name="x-powered-by-header" header-name="X-Powered-By" header-value="Undertow/1"/>
+            </filters>
+        </subsystem>
+        <subsystem xmlns="urn:jboss:domain:webservices:1.2">
+            <modify-wsdl-address>true</modify-wsdl-address>
+            <wsdl-host>jbossws.undefined.host</wsdl-host>
+            <endpoint-config name="Standard-Endpoint-Config">
+                <pre-handler-chain name="recording-handlers" protocol-bindings="##SOAP11_HTTP ##SOAP11_HTTP_MTOM ##SOAP12_HTTP ##SOAP12_HTTP_MTOM">
+                    <handler name="RecordingHandler" class="org.jboss.ws.common.invocation.RecordingServerHandler"/>
+                </pre-handler-chain>
+            </endpoint-config>
+            <endpoint-config name="Recording-Endpoint-Config">
+                <pre-handler-chain name="recording-handlers" protocol-bindings="##SOAP11_HTTP ##SOAP11_HTTP_MTOM ##SOAP12_HTTP ##SOAP12_HTTP_MTOM">
+                    <handler name="RecordingHandler" class="org.jboss.ws.common.invocation.RecordingServerHandler"/>
+                </pre-handler-chain>
+            </endpoint-config>
+            <client-config name="Standard-Client-Config"/>
+        </subsystem>
+        <subsystem xmlns="urn:jboss:domain:weld:2.0"/>
+        <subsystem xmlns="urn:jboss:domain:switchyard:1.0">
+            <security-configs/>
+            <modules>
+                <module identifier="org.switchyard.component.bean" implClass="org.switchyard.component.bean.deploy.BeanComponent"/>
+                <module identifier="org.switchyard.component.soap" implClass="org.switchyard.component.soap.deploy.SOAPComponent"/>
+                <module identifier="org.switchyard.component.camel" implClass="org.switchyard.component.camel.deploy.CamelComponent">
+                    <properties>
+                        <socketAddr>
+                            :18001
+                        </socketAddr>
+                    </properties>
+                </module>
+                <module identifier="org.switchyard.component.camel.atom" implClass="org.switchyard.component.camel.atom.deploy.CamelAtomComponent"/>
+                <module identifier="org.switchyard.component.camel.core" implClass="org.switchyard.component.camel.core.deploy.CamelCoreComponent"/>
+                <module identifier="org.switchyard.component.camel.cxf" implClass="org.switchyard.component.camel.cxf.deploy.CamelCxfComponent"/>
+                <module identifier="org.switchyard.component.camel.file" implClass="org.switchyard.component.camel.file.deploy.CamelFileComponent"/>
+                <module identifier="org.switchyard.component.camel.ftp" implClass="org.switchyard.component.camel.ftp.deploy.CamelFtpComponent"/>
+                <module identifier="org.switchyard.component.camel.jms" implClass="org.switchyard.component.camel.jms.deploy.CamelJmsComponent"/>
+                <module identifier="org.switchyard.component.camel.jpa" implClass="org.switchyard.component.camel.jpa.deploy.CamelJpaComponent"/>
+                <module identifier="org.switchyard.component.camel.mail" implClass="org.switchyard.component.camel.mail.deploy.CamelMailComponent"/>
+                <module identifier="org.switchyard.component.camel.mqtt" implClass="org.switchyard.component.camel.mqtt.deploy.CamelMqttComponent"/>
+                <module identifier="org.switchyard.component.camel.netty" implClass="org.switchyard.component.camel.netty.deploy.CamelNettyComponent"/>
+                <module identifier="org.switchyard.component.camel.quartz" implClass="org.switchyard.component.camel.quartz.deploy.CamelQuartzComponent"/>
+                <module identifier="org.switchyard.component.camel.rss" implClass="org.switchyard.component.camel.rss.deploy.CamelRSSComponent"/>
+                <module identifier="org.switchyard.component.camel.sql" implClass="org.switchyard.component.camel.sql.deploy.CamelSqlComponent"/>
+                <module identifier="org.switchyard.component.bpel" implClass="org.switchyard.component.bpel.deploy.BPELComponent"/>
+                <module identifier="org.switchyard.component.http" implClass="org.switchyard.component.http.deploy.HttpComponent"/>
+                <module identifier="org.switchyard.component.jca" implClass="org.switchyard.component.jca.deploy.JCAComponent"/>
+                <module identifier="org.switchyard.component.sca" implClass="org.switchyard.component.sca.deploy.SCAComponent">
+                    <properties>
+                        <cache-name>
+                            cluster
+                        </cache-name>
+                    </properties>
+                </module>
+                <module identifier="org.switchyard.component.resteasy" implClass="org.switchyard.component.resteasy.deploy.RESTEasyComponent"/>
+                <module identifier="org.switchyard.component.rules" implClass="org.switchyard.component.rules.deploy.RulesComponent"/>
+                <module identifier="org.switchyard.component.bpm" implClass="org.switchyard.component.bpm.deploy.BPMComponent"/>
+            </modules>
+            <extensions>
+                <extension identifier="org.apache.camel.component.bindy"/>
+                <extension identifier="org.apache.camel.component.hl7"/>
+                <extension identifier="org.apache.camel.component.mina2"/>
+                <extension identifier="org.apache.camel.component.mvel"/>
+                <extension identifier="org.apache.camel.component.ognl"/>
+                <extension identifier="org.apache.camel.component.jaxb"/>
+                <extension identifier="org.apache.camel.component.saxon"/>
+                <extension identifier="org.apache.camel.component.soap"/>
+            </extensions>
+        </subsystem>
+    </profile>
+
+    <interfaces>
+        <interface name="management">
+            <inet-address value="${jboss.bind.address.management:127.0.0.1}"/>
+        </interface>
+        <interface name="public">
+            <inet-address value="${jboss.bind.address:127.0.0.1}"/>
+        </interface>
+        <interface name="unsecure">
+            <inet-address value="${jboss.bind.address.unsecure:127.0.0.1}"/>
+        </interface>
+    </interfaces>
+
+    <socket-binding-group name="standard-sockets" default-interface="public" port-offset="${jboss.socket.binding.port-offset:0}">
+        <socket-binding name="management-http" interface="management" port="9990"/>
+        <socket-binding name="management-https" interface="management" port="${jboss.management.https.port:9993}"/>
+        <socket-binding name="ajp" port="${jboss.ajp.port:8009}"/>
+        <socket-binding name="http" port="8080"/>
+        <socket-binding name="https" port="8443"/>
+        <socket-binding name="jacorb" interface="unsecure" port="3528"/>
+        <socket-binding name="jacorb-ssl" interface="unsecure" port="3529"/>
+        <socket-binding name="messaging-group" port="0" multicast-address="${jboss.messaging.group.address:231.7.7.7}" multicast-port="${jboss.messaging.group.port:9876}"/>
+        <socket-binding name="txn-recovery-environment" port="4712"/>
+        <socket-binding name="txn-status-manager" port="4713"/>
+        <outbound-socket-binding name="mail-smtp">
+            <remote-destination host="localhost" port="25"/>
+        </outbound-socket-binding>
+        <outbound-socket-binding name="mail-krista" fixed-source-port="false">
+            <remote-destination host="localhost" port="25"/>
+        </outbound-socket-binding>
+    </socket-binding-group>
+
+</server>
