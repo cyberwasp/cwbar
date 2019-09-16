@@ -50,6 +50,11 @@ class Wildfly:
         cmd = "vim " + log_file_name
         xcmd.execute(cmd)
 
+    def log_tail(self):
+        log_file_name = self.get_log_file_name()
+        cmd = "tail -f " + log_file_name
+        xcmd.execute(cmd)
+
     def config(self):
         conf_file_name = self.get_conf_file_name()
         cmd = "vim " + conf_file_name

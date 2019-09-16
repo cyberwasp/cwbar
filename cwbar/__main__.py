@@ -67,6 +67,10 @@ def log(server_name):
     wf(server_name).log()
 
 
+def log_tail(server_name):
+    wf(server_name).log_tail()
+
+
 def config(server_name):
     wf(server_name).config()
 
