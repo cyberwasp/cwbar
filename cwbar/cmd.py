@@ -9,8 +9,9 @@ def execute(cmd):
         raise Exception("Ошибка выполениния команды " + cmd)
 
 
-def execute_with_output(cmd):
-    print(cmd)
+def execute_with_output(cmd, verbose=True):
+    if verbose:
+        print(cmd)
     process = subprocess.Popen(
         args=cmd,
         stdout=subprocess.PIPE,

@@ -132,6 +132,12 @@ def dstart(server_name):
     wf(server_name).dstart()
 
 
+def pid(server_name):
+    pids = list(wf(server_name).get_servers_pids(verbose=False))
+    if pids:
+        print(pids[0])
+
+
 if len(sys.argv) > 1:
     if sys.argv[1]:
         op = globals()[sys.argv[1].replace("-", "_")]

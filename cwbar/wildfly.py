@@ -24,9 +24,9 @@ class Wildfly:
     def get_deployment_dir(self):
         return os.path.join(self._home_dir, "standalone", "deployments")
 
-    def get_servers_pids(self):
+    def get_servers_pids(self, verbose=True):
         cmd = "jps -m"
-        for ps in xcmd.execute_with_output(cmd):
+        for ps in xcmd.execute_with_output(cmd, verbose):
             if self._home_dir in ps:
                 yield re.match(r"^(\d+)", ps).group(0)
 
