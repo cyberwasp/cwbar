@@ -31,7 +31,7 @@ class SourceProject:
         dependencies = set()
         with open(self.get_pom(), "r") as f:
             for line in f:
-                m = re.match("<(.*)-version>.*-SNAPSHOT</.*-version>", line.strip())
+                m = re.match("<(.*)[-.]version>.*-SNAPSHOT</.*[-.]version>", line.strip())
                 if m:
                     dependencies.add(SourceProject.get_project(m.group(1)))
         return dependencies
@@ -101,6 +101,11 @@ class SourceProject:
                     "regulatoryinfo/distributions/final/login/pom.xml"]
         elif self.name == "idp":
             return ["distributions/idp/pom.xml"]
+        elif self.name == "docreg":
+            return ["docregistries/distribution/application/pom.xml",
+                    "docregistries/distribution/middleware/pom.xml",
+                    "docregistries/distribution/api/pom.xml",
+                    "docregistries/distribution/login/pom.xml"]
         else:
             return []
 
@@ -124,6 +129,8 @@ class SourceProject:
                     "core/proxy/.*"]
         elif self.name == "nsi":
             return ["regulatoryinfo/distributions/final/it"]
+        elif self.name == "docreg":
+            return ["docregistries/gov-tasks-integration/gov-tasks-integration-it"]
         else:
             return []
 
