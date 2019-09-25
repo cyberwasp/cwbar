@@ -9,8 +9,23 @@ import settings
 import source_project
 import wildfly
 import postgres
+import async_profiler
 
 os.environ["JAVA_HOME"] = settings.JAVA_HOME
+
+
+def _param_value_int(args, name, default_value):
+    for arg in args:
+        if arg.startswith(name + "="):
+            return int(arg[len(name + "="):])
+    return default_value
+
+
+def _param_value_str(args, name, default_value):
+    for arg in args:
+        if arg.startswith(name + "="):
+            return arg[len(name + "="):]
+    return default_value
 
 
 def get_server_dir(server_name):
@@ -146,10 +161,20 @@ def sql(server_name):
     wildfly = wf(server_name)
     for data_source in wildfly.get_config().get_data_sources():
         if "postgres" in data_source.get_driver():
-            pg = postgres.Postgres(data_source.get_host(), data_source.get_port(), data_source.get_db(),
+            pg = postgres.Postgres(data_source.get_host(), data_source.get_port(), data_source.get_db(),\
                                    data_source.get_user())
             pg.psql()
             return
+
+def profile(server_name, *args):
+    pids = list(wf(server_name).get_servers_pids(verbose=False))
+    if pids:
+        profiler = async_profiler.AsyncProfiler(pids[0])
+        duration = _param_value_int(args, "--duration", 30)
+        output_file_name = _param_value_str(args, "--out", "/tmp/profile_result.svg")
+        profiler.profile(duration, output_file_name)
+    else:
+        print("Сервер не запущен")
 
 
 if len(sys.argv) > 1:
