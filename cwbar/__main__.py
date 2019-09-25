@@ -8,7 +8,7 @@ import krupd
 import settings
 import source_project
 import wildfly
-import pgpass
+import postgres
 
 os.environ["JAVA_HOME"] = settings.JAVA_HOME
 
@@ -41,7 +41,7 @@ def set_db(server_name, new_name):
             data_source.set_connection("jdbc:postgresql://" + new_name)
             m = re.match("(.*?):(.*?)/(.*)", new_name)
             if m:
-                user_pass = pgpass.lookup_user_pass(*m.groups())
+                user_pass = postgres.lookup_user_pass(*m.groups())
                 if user_pass:
                     data_source.set_user(user_pass[0])
                     data_source.set_password(user_pass[1])
@@ -140,6 +140,16 @@ def pid(server_name):
     pids = list(wf(server_name).get_servers_pids(verbose=False))
     if pids:
         print(pids[0])
+
+
+def sql(server_name):
+    wildfly = wf(server_name)
+    for data_source in wildfly.get_config().get_data_sources():
+        if "postgres" in data_source.get_driver():
+            pg = postgres.Postgres(data_source.get_host(), data_source.get_port(), data_source.get_db(),
+                                   data_source.get_user())
+            pg.psql()
+            return
 
 
 if len(sys.argv) > 1:

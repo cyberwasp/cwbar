@@ -14,6 +14,9 @@ class WildflyConfigTest(unittest.TestCase):
         self.assertEqual(data_sources[1].get_connection(), "jdbc:postgresql://172.17.14.19:5432/rebudget_mo3")
         self.assertEqual(data_sources[1].get_user(), "sysdba")
         self.assertEqual(data_sources[1].get_password(), "masterkey")
+        self.assertEqual(data_sources[1].get_host(), "172.17.14.19")
+        self.assertEqual(data_sources[1].get_port(), "5432")
+        self.assertEqual(data_sources[1].get_db(), "rebudget_mo3")
 
 
 if __name__ == '__main__':

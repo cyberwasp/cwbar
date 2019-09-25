@@ -1,5 +1,6 @@
 import datetime
 import os
+import re
 import shutil
 
 from lxml import etree
@@ -35,6 +36,26 @@ class DataSourceConfig:
 
     def set_driver(self, value):
         self.node.find("{*}driver").text = value
+
+    def get_port(self):
+        m = re.match("jdbc:postgresql://(.*?):(.*?)/(.*)", self.get_connection())
+        if m:
+            return m.group(2)
+        return "5432"
+
+    def get_host(self):
+        m = re.match("jdbc:postgresql://(.*?):(.*?)/(.*)", self.get_connection())
+        if m:
+            return m.group(1)
+        return "localhost"
+
+    def get_db(self):
+        m = re.match("jdbc:postgresql://(.*?):(.*?)/(.*)", self.get_connection())
+        if m:
+            return m.group(3)
+        return "unknown"
+
+
 
 
 class WildflyConfig:
