@@ -17,3 +17,15 @@ def execute_with_output(cmd, verbose=True):
         stdout=subprocess.PIPE,
         shell=True)
     return process.communicate()[0].decode("utf-8").split("\n")
+
+
+def execute_with_input(cmd, input_data, verbose=True):
+    if verbose:
+        print(cmd)
+    process = subprocess.Popen(
+        args=cmd,
+        stdin=subprocess.PIPE,
+        shell=True)
+    process.communicate(input_data)
+
+
