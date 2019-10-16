@@ -131,6 +131,8 @@ class SourceProject:
             return ["regulatoryinfo/distributions/final/it"]
         elif self.name == "docreg":
             return ["docregistries/gov-tasks-integration/gov-tasks-integration-it"]
+        elif self.name == "retools":
+            return ["retools-reporting/retools-reporting-profile"]
         else:
             return []
 
