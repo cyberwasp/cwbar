@@ -1,1 +1,1 @@
-/home/orlov/Krista/sources/.control/cwbar/__main__.py
+cwbar/__main__.py
