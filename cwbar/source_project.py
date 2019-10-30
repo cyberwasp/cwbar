@@ -3,12 +3,8 @@ import os
 import re
 import pathlib
 
-try:
-    import cmd
-    import settings
-except:
-    import cwbar.cmd as cmd
-    import cwbar.settings as settings
+import cwbar.cmd
+import cwbar.settings
 
 
 class SourceProject:
@@ -40,7 +36,7 @@ class SourceProject:
         return set(self.dependencies)
 
     def mvn(self, pom, args):
-        cmd.execute(settings.MVN + " -T1.0C -f " + pom + " " + args)
+        cwbar.cmd.execute(cwbar.settings.MVN + " -T1.0C -f " + pom + " " + args)
 
     def build(self, clean, quick, force_add_distribution=False):
         if quick:
@@ -79,13 +75,13 @@ class SourceProject:
             return False
 
     def get_source_dir(self):
-        return os.path.join(settings.BASE_SOURCES, self.name)
+        return os.path.join(cwbar.settings.BASE_SOURCES, self.name)
 
     def get_pom(self):
         return os.path.join(self.get_source_dir(), "pom.xml")
 
     def get_compound_pom(self):
-        return os.path.join(settings.BASE_SOURCES, self.name + "-pom.xml")
+        return os.path.join(cwbar.settings.BASE_SOURCES, self.name + "-pom.xml")
 
     def get_distribution_projects(self, full=False):
         if self.name == "rebudget":
@@ -163,7 +159,7 @@ class SourceProject:
         if os.path.exists(touch_file):
             c += " -newer " + touch_file
         c += " -print"
-        return [f for f in cmd.execute_with_output(c) if f]
+        return [f for f in cwbar.cmd.execute_with_output(c) if f]
 
     def get_touch_marker_file(self):
         config_dir = os.path.expanduser(os.path.join("~", ".config", "krista"))

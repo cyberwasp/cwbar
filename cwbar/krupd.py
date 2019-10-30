@@ -1,6 +1,6 @@
 import os
 
-import cmd as xcmd
+import cwbar.cmd
 
 
 class Krupd:
@@ -10,7 +10,7 @@ class Krupd:
 
     def krupd(self, *args):
         cmd = " ".join([os.path.join(self.root_dir, "krupd")] + list(args))
-        xcmd.execute(cmd)
+        cwbar.cmd.execute(cmd)
 
     def start(self):
         self.krupd("jboss.start.debug")

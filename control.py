@@ -1,1 +1,0 @@
-cwbar/__main__.py

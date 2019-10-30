@@ -1,13 +1,8 @@
 import os
 
 
-
-try:
-    import settings
-    import cmd
-except:
-    import cwbar.settings as settings
-    import cwbar.cmd as cmd
+import cwbar.settings
+import cwbar.cmd
 
 
 def _match(part, value):
@@ -15,7 +10,7 @@ def _match(part, value):
 
 
 def lookup_user_pass(host, port, db):
-    with open(os.path.expanduser(settings.PG_PASS)) as f:
+    with open(os.path.expanduser(cwbar.settings.PG_PASS)) as f:
         for line in f.read().splitlines():
             line = line.split(":")
             if _match(line[0], host) and _match(line[1], port) and _match(line[2], db):
@@ -32,13 +27,14 @@ class Postgres(object):
         self.username = username
 
     def psql_cmd(self):
-        return settings.PSQL + " " + "-h " + self.host + " -U " + self.username + " -p " + self.port + " " + self.db
+        psql = cwbar.settings.PSQL
+        return psql + " " + "-h " + self.host + " -U " + self.username + " -p " + self.port + " " + self.db
 
     def psql(self):
-        cmd.execute(self.psql_cmd())
+        cwbar.cmd.execute(self.psql_cmd())
 
     def exec_sql(self, sql):
-        cmd.execute_with_input(self.psql_cmd(), sql)
+        cwbar.cmd.execute_with_input(self.psql_cmd(), sql)
 
     def running_queries(self):
         QUERY = """

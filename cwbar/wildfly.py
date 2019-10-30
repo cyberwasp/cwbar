@@ -1,10 +1,10 @@
-import cmd as xcmd
 import glob
 import os
 import re
 import shutil
 
-import wildfly_config
+import cwbar.wildfly_config
+import cwbar.cmd
 
 
 class Wildfly:
@@ -26,39 +26,40 @@ class Wildfly:
 
     def get_servers_pids(self, verbose=True):
         cmd = "jps -m"
-        for ps in xcmd.execute_with_output(cmd, verbose):
+        for ps in cwbar.cmd.execute_with_output(cmd, verbose):
             if self._home_dir in ps:
                 yield re.match(r"^(\d+)", ps).group(0)
 
     def get_config(self):
         if not self._config:
-            self._config = wildfly_config.WildflyConfig(os.path.dirname(self._home_dir), self.get_conf_file_name())
+            dirname = os.path.dirname(self._home_dir)
+            self._config = cwbar.wildfly_config.WildflyConfig(dirname, self.get_conf_file_name())
         return self._config
 
     def cli(self, *args):
         print("Running cli: " + self._home_dir + " " + " ".join(args))
         cmd = os.path.join(self._home_dir, "bin", "jboss-cli.sh")
-        xcmd.execute(cmd + " " + " ".join(args))
+        cwbar.cmd.execute(cmd + " " + " ".join(args))
 
     def kill(self):
         for pid in self.get_servers_pids():
             cmd = 'kill -s KILL ' + str(pid)
-            xcmd.execute(cmd)
+            cwbar.cmd.execute(cmd)
 
     def log(self):
         log_file_name = self.get_log_file_name()
         cmd = "vim " + log_file_name
-        xcmd.execute(cmd)
+        cwbar.cmd.execute(cmd)
 
     def log_tail(self):
         log_file_name = self.get_log_file_name()
         cmd = "tail -f " + log_file_name
-        xcmd.execute(cmd)
+        cwbar.cmd.execute(cmd)
 
     def config(self):
         conf_file_name = self.get_conf_file_name()
         cmd = "vim " + conf_file_name
-        xcmd.execute(cmd)
+        cwbar.cmd.execute(cmd)
 
     def deploy(self, project, full, project_names):
         targets = project.get_distribution_project_targets(full)
@@ -75,4 +76,4 @@ class Wildfly:
                 self.cli("-c", "--command=\"deploy --force " + target + "\"")
 
     def dstart(self):
-        xcmd.execute(os.path.join(self._home_dir, "bin", "domain.sh"))
+        cwbar.cmd.execute(os.path.join(self._home_dir, "bin", "domain.sh"))
