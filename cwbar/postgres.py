@@ -15,10 +15,11 @@ def _match(part, value):
 
 
 def lookup_user_pass(host, port, db):
-    for line in open(os.path.expanduser(settings.PG_PASS)).read().splitlines():
-        line = line.split(":")
-        if _match(line[0], host) and _match(line[1], port) and _match(line[2], db):
-            return line[3:]
+    with open(os.path.expanduser(settings.PG_PASS)) as f:
+        for line in f.read().splitlines():
+            line = line.split(":")
+            if _match(line[0], host) and _match(line[1], port) and _match(line[2], db):
+                return line[3:]
     return None
 
 
