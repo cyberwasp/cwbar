@@ -38,7 +38,13 @@ class SourceProject:
     def mvn(self, pom, args):
         cwbar.cmd.execute(cwbar.settings.MVN + " -T1.0C -f " + pom + " " + args)
 
-    def build(self, clean, quick, force_add_distribution=False):
+    def build(self, only_this, clean, quick):
+        if only_this:
+            self.build_only_this(clean, quick)
+        else:
+            self.build_with_dependencies(clean, quick)
+
+    def build_only_this(self, clean, quick, force_add_distribution=False):
         if quick:
             return self.build_quick(clean, force_add_distribution)
         else:
@@ -52,9 +58,9 @@ class SourceProject:
         while len(dependencies) > 0:
             projects = list(filter(lambda p: not p.get_dependencies().intersection(dependencies), dependencies))
             for project in projects:
-                force_add_distribution |= project.build(clean, quick)
+                force_add_distribution |= project.build_with_dependencies(clean, quick)
                 dependencies.remove(project)
-        self.build(clean, quick, force_add_distribution)
+        return self.build_only_this(clean, quick, force_add_distribution)
 
     def build_compound(self, clean):
         pom = self.get_compound_pom()
@@ -88,7 +94,8 @@ class SourceProject:
             return ["rebudget/distribution/application/pom.xml",
                     "rebudget/distribution/middleware/pom.xml",
                     "rebudget/distribution/api/pom.xml",
-                    "rebudget/distribution/login/pom.xml"]
+                    "rebudget/distribution/login/pom.xml",
+                    "rebudget/distribution/birt/pom.xml"]
         elif self.name == "nsi":
             return ["regulatoryinfo/distributions/final/application/pom.xml",
                     "regulatoryinfo/distributions/final/middleware/pom.xml",

@@ -118,12 +118,12 @@ def restart(server_name, *args):
 
 def build(server_name, *args):
     print("Full build: " + server_name)
-    sp(server_name).build_with_dependencies("--non-clean" not in args, False)
+    sp(server_name).build("--only" in args, "--non-clean" not in args, False)
 
 
 def qbuild(server_name, *args):
     print("Quick build: " + server_name)
-    sp(server_name).build_with_dependencies("--non-clean" not in args, True)
+    sp(server_name).build("--only" in args, "--non-clean" not in args, True)
 
 
 def cbuild(server_name, *args):
