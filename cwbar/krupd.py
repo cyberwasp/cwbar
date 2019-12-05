@@ -16,6 +16,6 @@ class Krupd:
         self.krupd("jboss.start.debug")
 
     def stop(self):
-        self.krupd("jboss.start.debug")
+        self.krupd("jboss.stop")
 
 
