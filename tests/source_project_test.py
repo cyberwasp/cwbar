@@ -28,7 +28,7 @@ class SourceProjectTest(unittest.TestCase):
 
     def test_source_project_build(self):
         project = cwbar.source_project.SourceProject.get_project("project-c")
-        self.assertEqual(project.build_with_dependencies(False, False), None)
+        self.assertEqual(project.build_with_dependencies(False, False), True)
 
     def test_source_project_build_quick(self):
         project = cwbar.source_project.SourceProject.get_project("project-c")
