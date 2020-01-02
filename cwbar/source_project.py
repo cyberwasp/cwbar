@@ -36,7 +36,7 @@ class SourceProject:
         return set(self.dependencies)
 
     def mvn(self, pom, args):
-        cwbar.cmd.execute(cwbar.settings.MVN + " -T1.0C -f " + pom + " " + args)
+        cwbar.cmd.execute(os.path.expanduser(cwbar.settings.MVN) + " -T1.0C -f " + pom + " " + args)
 
     def build(self, only_this, clean, quick):
         if only_this:
@@ -81,13 +81,13 @@ class SourceProject:
             return False
 
     def get_source_dir(self):
-        return os.path.join(cwbar.settings.BASE_SOURCES, self.name)
+        return os.path.expanduser(os.path.join(cwbar.settings.BASE_SOURCES, self.name))
 
     def get_pom(self):
         return os.path.join(self.get_source_dir(), "pom.xml")
 
     def get_compound_pom(self):
-        return os.path.join(cwbar.settings.BASE_SOURCES, self.name + "-pom.xml")
+        return self.get_source_dir() + "-pom.xml"
 
     def get_distribution_projects(self, full=False):
         if self.name == "rebudget":
