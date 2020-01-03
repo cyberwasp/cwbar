@@ -8,30 +8,19 @@ import cwbar.postgres
 import cwbar.settings
 import cwbar.source_project
 import cwbar.wildfly
-
-
-def _param_value_int(args, name, default_value):
-    for arg in args:
-        if arg.startswith(name + "="):
-            return int(arg[len(name + "="):])
-    return default_value
-
-
-def _param_value_str(args, name, default_value):
-    for arg in args:
-        if arg.startswith(name + "="):
-            return arg[len(name + "="):]
-    return default_value
+import cwbar.arguments
+import cwbar.cmd
 
 
 class Server:
 
-    def __init__(self, server_type, server_name=None):
-        self.server_type = server_type
-        self.server_name = server_name if server_name else self.server_type
+    def __init__(self, server_type, name=None, ssh=None):
+        self.type = server_type
+        self.name = name if name else self.type
+        self.ssh = ssh + "-" + type if ssh else None
 
     def get_server_dir(self):
-        return os.path.join(cwbar.settings.BASE_COMPILE, self.server_name)
+        return os.path.join(cwbar.settings.BASE_COMPILE, self.name)
 
     def get_wildfly_dir_name(self):
         return glob.glob(os.path.join(self.get_server_dir(), "jboss-*"))[0]
@@ -70,7 +59,7 @@ class Server:
         return cwbar.krupd.Krupd(root_dir)
 
     def sp(self):
-        return cwbar.source_project.SourceProject.get_project(self.server_type)
+        return cwbar.source_project.SourceProject.get_project(self.type)
 
     def log(self):
         self.wf().log()
@@ -80,6 +69,11 @@ class Server:
 
     def config(self):
         self.wf().config()
+
+    def jconfig(self):
+        conf_file_name = os.path.join(self.get_server_dir(), "jboss.properties")
+        cmd = "vim " + conf_file_name
+        cwbar.cmd.execute(cmd)
 
     def start(self):
         self.kd().start()
@@ -91,41 +85,41 @@ class Server:
         self.wf().kill()
 
     def cli(self, *args):
-        self.wf().cli(*args)
+        self.wf().cli(args)
 
-    def restart(self, *args):
-        if "--soft" in args:
+    def restart(self, soft=False):
+        if soft:
             self.stop()
         else:
             self.kill()
         self.start()
 
-    def build(self, *args):
-        print("Full build: " + self.server_type)
-        self.sp().build("--only" in args, "--non-clean" not in args, False)
+    def build(self, only=False, non_clean=False):
+        print("Full build: " + self.type)
+        self.sp().build(only, non_clean, False)
 
-    def qbuild(self, *args):
-        print("Quick build: " + self.server_type)
-        self.sp().build("--only" in args, "--non-clean" not in args, True)
+    def qbuild(self, only=False, non_clean=False):
+        print("Quick build: " + self.type)
+        self.sp().build(only, non_clean, True)
 
-    def cbuild(self, *args):
-        print("Build compound pom: " + self.server_type)
-        self.sp().build_compound("--clean" in args)
+    def cbuild(self, clean=False):
+        print("Build compound pom: " + self.type)
+        self.sp().build_compound(clean)
 
-    def deploy(self, *args):
-        print("Deploy: " + self.server_type)
+    def deploy(self, full=False, deployments: list = None):
+        print("Deploy: " + self.type)
         project = self.sp()
         server = self.wf()
-        server.deploy(project, "--full" in args, set(filter(lambda x: not x.startswith("--"), args)))
+        server.deploy(project, full, deployments)
 
-    def ddeploy(self, *args):
-        print("Deploy domain: " + self.server_type)
+    def ddeploy(self, full=False, deployments=None):
+        print("Deploy domain: " + self.type)
         project = self.sp()
         server = self.wf()
-        server.ddeploy(project, "--full" in args, set(filter(lambda x: not x.startswith("--"), args)))
+        server.ddeploy(project, full, deployments)
 
     def dstart(self):
-        print("Starting domain: " + self.server_type)
+        print("Starting domain: " + self.type)
         self.wf().dstart()
 
     def pid(self):
@@ -142,12 +136,10 @@ class Server:
                 pg.psql()
                 return
 
-    def profile(self, *args):
+    def profile(self, duration=30, output_file_name="/tmp/profile_result.svg"):
         pids = list(self.wf().get_servers_pids(verbose=False))
         if pids:
             profiler = cwbar.async_profiler.AsyncProfiler(pids[0])
-            duration = _param_value_int(args, "--duration", 30)
-            output_file_name = _param_value_str(args, "--out", "/tmp/profile_result.svg")
-            profiler.profile(duration, output_file_name)
+            profiler.profile(int(duration), output_file_name)
         else:
             print("Сервер не запущен")

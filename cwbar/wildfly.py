@@ -36,7 +36,7 @@ class Wildfly:
             self._config = cwbar.wildfly_config.WildflyConfig(dirname, self.get_conf_file_name())
         return self._config
 
-    def cli(self, *args):
+    def cli(self, args):
         print("Running cli: " + self._home_dir + " " + " ".join(args))
         cmd = os.path.join(self._home_dir, "bin", "jboss-cli.sh")
         cwbar.cmd.execute(cmd + " " + " ".join(args))
@@ -61,11 +61,11 @@ class Wildfly:
         cmd = "vim " + conf_file_name
         cwbar.cmd.execute(cmd)
 
-    def deploy(self, project, full, project_names):
+    def deploy(self, project, full, deployments):
         targets = project.get_distribution_project_targets(full)
         deployment_dir = self.get_deployment_dir()
         for target in targets:
-            if len(project_names) == 0 or os.path.basename(target).split(".")[0] in project_names:
+            if not deployments or os.path.basename(target).split(".")[0] in deployments:
                 print("Copy " + target)
                 shutil.copy(target, deployment_dir)
 
