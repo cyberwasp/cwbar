@@ -85,7 +85,7 @@ class Server:
         self.wf().kill()
 
     def cli(self, *args):
-        self.wf().cli(args)
+        self.wf().cli(*args)
 
     def restart(self, soft=False):
         if soft:

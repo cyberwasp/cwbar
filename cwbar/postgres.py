@@ -37,11 +37,11 @@ class Postgres(object):
         cwbar.cmd.execute_with_input(self.psql_cmd(), sql)
 
     def running_queries(self):
-        QUERY = """
+        query = """
 SELECT pid, age(clock_timestamp(), query_start), usename, query 
 FROM pg_stat_activity 
 WHERE query != '<IDLE>' AND query NOT ILIKE '%pg_stat_activity%' 
 ORDER BY query_start desc;
 """
-        self.exec_sql(QUERY)
+        self.exec_sql(query)
 

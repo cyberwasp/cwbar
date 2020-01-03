@@ -36,7 +36,7 @@ class Wildfly:
             self._config = cwbar.wildfly_config.WildflyConfig(dirname, self.get_conf_file_name())
         return self._config
 
-    def cli(self, args):
+    def cli(self, *args):
         print("Running cli: " + self._home_dir + " " + " ".join(args))
         cmd = os.path.join(self._home_dir, "bin", "jboss-cli.sh")
         cwbar.cmd.execute(cmd + " " + " ".join(args))

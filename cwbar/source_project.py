@@ -181,9 +181,9 @@ class SourceProject:
         distributions = self.get_distribution_projects(full)
         result = []
         for distribution in distributions:
-            target = os.path.join(self.get_source_dir(), os.path.dirname(distribution), "target")
-            l = glob.glob(os.path.join(target, "*.war")) + glob.glob(os.path.join(target, "*.ear"))
-            if len(l) == 0:
+            target_dir = os.path.join(self.get_source_dir(), os.path.dirname(distribution), "target")
+            target_files = glob.glob(os.path.join(target_dir, "*.war")) + glob.glob(os.path.join(target_dir, "*.ear"))
+            if len(target_files) == 0:
                 raise Exception("Проект " + distribution + " не собран")
-            result += l
+            result += target_files
         return result

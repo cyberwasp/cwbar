@@ -56,8 +56,6 @@ class DataSourceConfig:
         return "unknown"
 
 
-
-
 class WildflyConfig:
 
     def __init__(self, server_name, file_name):
@@ -67,7 +65,7 @@ class WildflyConfig:
 
     def get_data_sources(self):
         for node in self.tree.getroot().findall("{*}profile/{*}subsystem/{*}datasources/{*}datasource"):
-             yield DataSourceConfig(node)
+            yield DataSourceConfig(node)
 
     def backup(self):
         backup_dir = os.path.expanduser(os.path.join("~", ".cwasp", "control", "servers", self.server_name, "backup"))
