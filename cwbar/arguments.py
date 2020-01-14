@@ -4,7 +4,7 @@ import os
 
 def _is_full_var_args(func):
     spec = inspect.getfullargspec(func)
-    return spec.args == ["self"] and spec.varargs and not spec.varkw
+    return not spec.defaults and not spec.varkw
 
 
 def _args_to_kwargs(args):
