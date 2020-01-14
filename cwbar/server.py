@@ -96,11 +96,11 @@ class Server:
 
     def build(self, only=False, non_clean=False):
         print("Full build: " + self.type)
-        self.sp().build(only, non_clean, False)
+        self.sp().build(only, not non_clean, False)
 
     def qbuild(self, only=False, non_clean=False):
         print("Quick build: " + self.type)
-        self.sp().build(only, non_clean, True)
+        self.sp().build(only, not non_clean, True)
 
     def cbuild(self, clean=False):
         print("Build compound pom: " + self.type)
