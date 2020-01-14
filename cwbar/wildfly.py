@@ -2,6 +2,7 @@ import glob
 import os
 import re
 import shutil
+from datetime import date, timedelta, datetime
 
 import cwbar.wildfly_config
 import cwbar.cmd
@@ -18,8 +19,11 @@ class Wildfly:
             os.path.join(self._home_dir, "standalone", "configuration", "standalone-full.xml"))
         return file_name_list[0] if file_name_list else None
 
-    def get_log_file_name(self):
-        return glob.glob(os.path.join(self._home_dir, "standalone", "log", "server.log"))[0]
+    def get_log_file_name(self, yesterday):
+        suffix = ""
+        if yesterday:
+            suffix = "." + datetime.strftime(datetime.now() - timedelta(1), '%Y-%m-%d')
+        return glob.glob(os.path.join(self._home_dir, "standalone", "log", "server.log" + suffix))[0]
 
     def get_deployment_dir(self):
         return os.path.join(self._home_dir, "standalone", "deployments")
@@ -46,13 +50,13 @@ class Wildfly:
             cmd = 'kill -s KILL ' + str(pid)
             cwbar.cmd.execute(cmd)
 
-    def log(self):
-        log_file_name = self.get_log_file_name()
+    def log(self, yesterday):
+        log_file_name = self.get_log_file_name(yesterday)
         cmd = "vim " + log_file_name
         cwbar.cmd.execute(cmd)
 
     def log_tail(self):
-        log_file_name = self.get_log_file_name()
+        log_file_name = self.get_log_file_name(False)
         cmd = "tail -f " + log_file_name
         cwbar.cmd.execute(cmd)
 
