@@ -50,10 +50,15 @@ class Wildfly:
             cmd = 'kill -s KILL ' + str(pid)
             cwbar.cmd.execute(cmd)
 
-    def log(self, yesterday):
+    def log(self, yesterday, clean):
         log_file_name = self.get_log_file_name(yesterday)
-        cmd = "vim " + log_file_name
-        cwbar.cmd.execute(cmd)
+        if not clean:
+            cmd = "vim " + log_file_name
+            cwbar.cmd.execute(cmd)
+        else:
+            shutil.copy(log_file_name, log_file_name + ".old")
+            with open(log_file_name, "w"):
+                pass
 
     def log_tail(self):
         log_file_name = self.get_log_file_name(False)
