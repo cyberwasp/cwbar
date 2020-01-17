@@ -1,3 +1,4 @@
+import datetime
 import glob
 import os
 import re
@@ -97,14 +98,18 @@ class Server:
     def build(self, only=False, non_clean=False):
         print("Full build: " + self.type)
         self.sp().build(only, not non_clean, False)
+        print("Ends: " + str(datetime.datetime.now()))
 
     def qbuild(self, only=False, non_clean=False):
         print("Quick build: " + self.type)
         self.sp().build(only, not non_clean, True)
+        print("Ends: " + str(datetime.datetime.now()))
 
     def cbuild(self, clean=False):
         print("Build compound pom: " + self.type)
         self.sp().build_compound(clean)
+        print("Ends: " + str(datetime.datetime.now()))
+
 
     def deploy(self, full=False, deployments: list = None):
         print("Deploy: " + self.type)
