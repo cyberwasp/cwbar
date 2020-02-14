@@ -35,6 +35,13 @@ class SourceProject:
     def get_dependencies(self):
         return set(self.dependencies)
 
+    def dependencies_to_build(self):
+        all_dependencies = []
+        for dependency in self.get_dependencies():
+            all_dependencies = dependency.dependencies_to_build() + [dependency] + all_dependencies
+        seen = set()
+        return [x for x in all_dependencies if not (x in seen or seen.add(x))]
+
     def mvn(self, pom, args):
         cwbar.cmd.execute(os.path.expanduser(cwbar.settings.MVN) + " -T1.0C -f " + pom + " " + args)
 
@@ -53,13 +60,11 @@ class SourceProject:
             return True
 
     def build_with_dependencies(self, clean, quick):
-        dependencies = self.get_dependencies()
+        dependencies_to_build = self.dependencies_to_build()
+        print("With dependencies " + str(dependencies_to_build))
         force_add_distribution = False
-        while len(dependencies) > 0:
-            projects = list(filter(lambda p: not p.get_dependencies().intersection(dependencies), dependencies))
-            for project in projects:
-                force_add_distribution |= project.build_with_dependencies(clean, quick)
-                dependencies.remove(project)
+        for dependency in dependencies_to_build:
+            force_add_distribution = force_add_distribution or dependency.build_only_this(clean, quick, False)
         return self.build_only_this(clean, quick, force_add_distribution)
 
     def build_compound(self, clean):

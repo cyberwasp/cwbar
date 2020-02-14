@@ -19,6 +19,10 @@ class SourceProjectTest(unittest.TestCase):
         project = cwbar.source_project.SourceProject.get_project("project-c")
         self.assertEqual(2, len(project.get_dependencies()))
 
+    def test_source_project_dependencies_to_build(self):
+        project = cwbar.source_project.SourceProject.get_project("project-c")
+        self.assertEqual(2, len(project.get_dependencies()))
+
     def test_source_project_get_changed_poms(self):
         project = cwbar.source_project.SourceProject.get_project("project-c")
         pom = os.path.join(project.get_source_dir(), "pom.xml")
