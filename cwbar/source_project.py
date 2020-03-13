@@ -64,7 +64,7 @@ class SourceProject:
         print("With dependencies " + str(dependencies_to_build))
         force_add_distribution = False
         for dependency in dependencies_to_build:
-            force_add_distribution = force_add_distribution or dependency.build_only_this(clean, quick, False)
+            force_add_distribution = dependency.build_only_this(clean, quick, False) or force_add_distribution
         return self.build_only_this(clean, quick, force_add_distribution)
 
     def build_compound(self, clean):
