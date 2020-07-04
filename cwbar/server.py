@@ -21,7 +21,7 @@ class Server:
         self.ssh = ssh + "-" + type if ssh else None
 
     def get_server_dir(self):
-        return os.path.join(cwbar.settings.BASE_COMPILE, self.name)
+        return os.path.realpath(os.path.join(cwbar.settings.BASE_COMPILE, self.name))
 
     def get_wildfly_dir_name(self):
         return glob.glob(os.path.join(self.get_server_dir(), "jboss-*"))[0]
