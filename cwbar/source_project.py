@@ -43,7 +43,7 @@ class SourceProject:
         return [x for x in all_dependencies if not (x in seen or seen.add(x))]
 
     def mvn(self, pom, args):
-        cwbar.cmd.execute(os.path.expanduser(cwbar.settings.MVN) + " -T1.0C -f " + pom + " " + args)
+        cwbar.cmd.execute(os.path.expanduser(cwbar.settings.MVN) + " -q -T1.0C -f " + pom + " " + args)
 
     def build(self, only_this, clean, quick):
         if only_this:
