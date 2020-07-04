@@ -110,7 +110,6 @@ class Server:
         self.sp().build_compound(clean)
         print("Ends: " + str(datetime.datetime.now()))
 
-
     def deploy(self, full=False, deployments: list = None):
         print("Deploy: " + self.type)
         project = self.sp()
@@ -148,3 +147,8 @@ class Server:
             profiler.profile(int(duration), output_file_name)
         else:
             print("Сервер не запущен")
+
+    def props(self):
+        conf_file_name = os.path.join(self.get_server_dir(), "jboss.properties");
+        cmd = "vim " + conf_file_name
+        cwbar.cmd.execute(cmd)
