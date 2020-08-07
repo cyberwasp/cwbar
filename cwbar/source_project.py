@@ -94,28 +94,19 @@ class SourceProject:
     def get_compound_pom(self):
         return self.get_source_dir() + "-pom.xml"
 
+    @staticmethod
+    def is_distribution_pom(pom):
+        with open(pom) as f:
+            data = f.read()
+            return "<packaging>ear" in data or "<packaging>war" in data
+
     def get_distribution_projects(self, full=False):
-        if self.name == "rebudget":
-            return ["rebudget/distribution/application/pom.xml",
-                    "rebudget/distribution/middleware/pom.xml",
-                    "rebudget/distribution/api/pom.xml",
-                    "rebudget/distribution/login/pom.xml",
-                    "rebudget/distribution/birt/pom.xml"]
-        elif self.name == "nsi":
-            return ["regulatoryinfo/distributions/final/application/pom.xml",
-                    "regulatoryinfo/distributions/final/middleware/pom.xml",
-                    "regulatoryinfo/distributions/final/api/pom.xml",
-                    "regulatoryinfo/distributions/final/service/pom.xml",
-                    "regulatoryinfo/distributions/final/login/pom.xml"]
-        elif self.name == "idp":
-            return ["distributions/idp/pom.xml"]
-        elif self.name == "docreg":
-            return ["docregistries/distribution/application/pom.xml",
-                    "docregistries/distribution/middleware/pom.xml",
-                    "docregistries/distribution/api/pom.xml",
-                    "docregistries/distribution/login/pom.xml"]
-        else:
-            return []
+        minimum_set = {"application", "middleware", "login", "api"}
+        pattern = os.path.join(self.get_source_dir(), "*", "distribution*", "**", "pom.xml")
+        for pom in glob.glob(pattern, recursive=True):
+            pom_dir = os.path.basename(os.path.dirname(pom))
+            if self.is_distribution_pom(pom) and pom_dir != "testing" and (full or pom_dir in minimum_set):
+                yield pom[len(self.get_source_dir()) + 1:]
 
     def get_ignored_dirs(self):
         if self.name == "core":

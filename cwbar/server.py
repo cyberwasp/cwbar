@@ -110,6 +110,13 @@ class Server:
         self.sp().build_compound(clean)
         print("Ends: " + str(datetime.datetime.now()))
 
+    def dist_list(self, full=False):
+        print("Distributions list: " + self.type)
+        for d in self.sp().get_distribution_projects(full):
+            print(d)
+        print("Ends: " + str(datetime.datetime.now()))
+
+
     def deploy(self, full=False, deployments: list = None):
         print("Deploy: " + self.type)
         project = self.sp()

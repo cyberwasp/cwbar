@@ -41,6 +41,10 @@ class SourceProjectTest(unittest.TestCase):
         Path(pom).touch(mode=0o777, exist_ok=True)
         self.assertEqual(project.build_quick(False, False), True)
 
-
+    def test_source_project_get_distributions(self):
+        project = cwbar.source_project.SourceProject.get_project("project-d")
+        self.assertEqual(list(project.get_distribution_projects()), ["d/distribution/application/pom.xml"])
+        self.assertEqual(list(project.get_distribution_projects(True)), ["d/distribution/application/pom.xml",
+                                                                         "d/distribution/main/pom.xml"])
 if __name__ == '__main__':
     unittest.main()
