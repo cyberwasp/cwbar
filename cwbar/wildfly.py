@@ -2,10 +2,11 @@ import glob
 import os
 import re
 import shutil
-from datetime import date, timedelta, datetime
+from datetime import timedelta, datetime
 
-import cwbar.wildfly_config
 import cwbar.cmd
+import cwbar.wildfly_config
+from cwbar import wildfly_log
 
 
 class Wildfly:
@@ -50,11 +51,16 @@ class Wildfly:
             cmd = 'kill -s KILL ' + str(pid)
             cwbar.cmd.execute(cmd)
 
-    def log(self, yesterday, clean):
+    def log(self, yesterday, clean, filter_string):
         log_file_name = self.get_log_file_name(yesterday)
         if not clean:
-            cmd = "vim " + log_file_name
-            cwbar.cmd.execute(cmd)
+            if not filter:
+                cmd = "vim " + log_file_name
+                cwbar.cmd.execute(cmd)
+            else:
+                content = "\n".join(map(lambda x: str(x), wildfly_log.LogFile(log_file_name).filter(filter_string)))
+                cmd = "vim - << EOF\n" + content + "\nEOF\n"
+                cwbar.cmd.execute(cmd)
         else:
             shutil.copy(log_file_name, log_file_name + ".old")
             with open(log_file_name, "w"):

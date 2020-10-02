@@ -7,9 +7,12 @@ import cwbar.wildfly_log
 class TestLog(unittest.TestCase):
 
     def test_log_creation(self):
-        with open(os.path.join("data", "server.log")) as f:
-            data = f.read()
-        log = cwbar.wildfly_log.LogFile(data)
+        log = cwbar.wildfly_log.LogFile(os.path.join("data", "server.log"))
         e0 = log.entries[0]
         self.assertEqual(len(log.entries), 9)
         self.assertEqual(e0.source, "org.jboss.as.ejb3.deployment.processors.EjbJndiBindingsDeploymentUnitProcessor")
+
+    def test_log_filter(self):
+        log = cwbar.wildfly_log.LogFile(os.path.join("data", "server.log"))
+        res = list(log.filter("'Event' in e.source"))
+        self.assertEqual(len(res), 2)

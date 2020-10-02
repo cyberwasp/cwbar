@@ -62,8 +62,8 @@ class Server:
     def sp(self):
         return cwbar.source_project.SourceProject.get_project(self.type)
 
-    def log(self, yesterday=False, clean=False):
-        self.wf().log(yesterday, clean)
+    def log(self, yesterday=False, clean=False, filter=None):
+        self.wf().log(yesterday, clean, filter)
 
     def log_tail(self):
         self.wf().log_tail()
