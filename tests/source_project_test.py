@@ -7,6 +7,8 @@ import cwbar.source_project
 import cwbar.settings
 
 cwbar.settings.BASE_SOURCES = os.path.join(os.path.dirname(__file__), "data", "sources")
+cwbar.settings.JAVA_HOME = None
+cwbar.settings.MVN = "mvn"
 
 
 class SourceProjectTest(unittest.TestCase):

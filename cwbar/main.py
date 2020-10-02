@@ -4,7 +4,8 @@ import cwbar.arguments
 import cwbar.server
 import cwbar.settings
 
-os.environ["JAVA_HOME"] = os.path.expanduser(cwbar.settings.JAVA_HOME)
+if cwbar.settings.JAVA_HOME:
+    os.environ["JAVA_HOME"] = os.path.expanduser(cwbar.settings.JAVA_HOME)
 
 
 def main(args):
