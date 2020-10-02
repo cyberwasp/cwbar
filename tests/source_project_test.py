@@ -43,9 +43,9 @@ class SourceProjectTest(unittest.TestCase):
 
     def test_source_project_get_distributions(self):
         project = cwbar.source_project.SourceProject.get_project("project-d")
-        self.assertEqual(list(project.get_distribution_projects(False)), ["d/distribution/application/pom.xml"])
-        self.assertEqual(list(project.get_distribution_projects(True)), ["d/distribution/application/pom.xml",
-                                                                         "d/distribution/main/pom.xml"])
+        self.assertEqual(set(project.get_distribution_projects(False)), {"d/distribution/application/pom.xml"})
+        self.assertEqual(set(project.get_distribution_projects(True)), {"d/distribution/application/pom.xml",
+                                                                        "d/distribution/main/pom.xml"})
 
 
 if __name__ == '__main__':
