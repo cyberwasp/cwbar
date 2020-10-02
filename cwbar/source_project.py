@@ -11,17 +11,19 @@ class SourceProject:
     projects = {}
 
     @staticmethod
-    def get_project(name):
-        project = SourceProject.projects.get(name) or SourceProject(name)
-        SourceProject.projects[name] = project
+    def get_project(name, context=None):
+        full_name = context + "-" + name if context else name
+        project = SourceProject.projects.get(full_name) or SourceProject(name, context)
+        SourceProject.projects[full_name] = project
         return project
 
-    def __init__(self, name):
+    def __init__(self, name, context):
         self.name = name
+        self.context = context
         self.dependencies = self.calc_dependencies()
 
     def __repr__(self):
-        return "SourceProject(" + self.name + ")"
+        return "SourceProject(" + self.name + ", " + self.context + ")"
 
     def calc_dependencies(self):
         dependencies = set()
@@ -29,7 +31,7 @@ class SourceProject:
             for line in f:
                 m = re.match("<(.*)[-.]version>.*-SNAPSHOT</.*[-.]version>", line.strip())
                 if m:
-                    dependencies.add(SourceProject.get_project(m.group(1)))
+                    dependencies.add(SourceProject.get_project(m.group(1), self.context if self.context else self.name))
         return dependencies
 
     def get_dependencies(self):
@@ -86,6 +88,11 @@ class SourceProject:
             return False
 
     def get_source_dir(self):
+        if self.context:
+            full_name = self.context + "-" + self.name
+            full_name = os.path.expanduser(os.path.join(cwbar.settings.BASE_SOURCES, full_name))
+            if os.path.exists(full_name):
+                return full_name
         return os.path.expanduser(os.path.join(cwbar.settings.BASE_SOURCES, self.name))
 
     def get_pom(self):
@@ -120,8 +127,8 @@ class SourceProject:
                     "core/dataaccess/unientity-support-web",
                     "core/dataaccess/unientity-support",
                     "core/license-manager",
-                    "core/gui/web/tabs-component-plugin-frontend",
                     "core/gui/web/header-component-plugin-frontend",
+                    "core/gui/web/application-styles-frontend",
                     "core/dsign/webservice-csp",
                     "tools/.*",
                     "core/security/it",
@@ -132,6 +139,10 @@ class SourceProject:
             return ["docregistries/gov-tasks-integration/gov-tasks-integration-it"]
         elif self.name == "retools":
             return ["retools-reporting/retools-reporting-profile"]
+        elif self.name == "fileserver":
+            return ["selenium-tests"]
+        elif self.name == "fkc":
+            return ["fkc-it"]
         else:
             return []
 
@@ -167,7 +178,8 @@ class SourceProject:
     def get_touch_marker_file(self):
         config_dir = os.path.expanduser(os.path.join("~", ".config", "krista"))
         os.makedirs(config_dir, exist_ok=True)
-        return os.path.join(config_dir, self.name + ".touch")
+        full_name = self.context + "-" + self.name if self.context else self.name
+        return os.path.join(config_dir, full_name + ".touch")
 
     def touch_marker(self):
         touch_marker_file = self.get_touch_marker_file()
