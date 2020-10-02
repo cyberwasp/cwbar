@@ -20,7 +20,7 @@ class Arguments:
     def __init__(self, args):
         self._raw_command = next(filter(lambda x: not x.startswith("--"), args[1:]), None)
         self._command_index = args.index(self._raw_command)
-        self._server_type = os.path.basename(args[0])
+        self._server_type = os.environ.get("SERVER_TYPE") if os.environ.get("SERVER_TYPE") else os.path.basename(args[0])
         self._server_kwargs = _args_to_kwargs(args[1:self._command_index])
         self._command_args = args[self._command_index + 1:]
         self._command_kwargs = _args_to_kwargs(args[self._command_index + 1:])
