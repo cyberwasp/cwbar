@@ -95,19 +95,19 @@ class Server:
             self.kill()
         self.start()
 
-    def build(self, only=False, non_clean=False):
+    def build(self, only=False, non_clean=False, full=False):
         print("Full build: " + self.type)
-        self.sp().build(only, not non_clean, False)
+        self.sp().build(only, not non_clean, False, full)
         print("Ends: " + str(datetime.datetime.now()))
 
-    def qbuild(self, only=False, non_clean=False):
+    def qbuild(self, only=False, non_clean=False, full=False):
         print("Quick build: " + self.type)
-        self.sp().build(only, not non_clean, True)
+        self.sp().build(only, not non_clean, True, full)
         print("Ends: " + str(datetime.datetime.now()))
 
-    def cbuild(self, clean=False):
+    def cbuild(self, clean=False, full=False):
         print("Build compound pom: " + self.type)
-        self.sp().build_compound(clean)
+        self.sp().build_compound(clean, full)
         print("Ends: " + str(datetime.datetime.now()))
 
     def dist_list(self, full=False):

@@ -23,7 +23,7 @@ class SourceProject:
         self.dependencies = self.calc_dependencies()
 
     def __repr__(self):
-        return "SourceProject(" + self.name + ", " + self.context + ")"
+        return "SourceProject(" + self.name + ((", " + self.context + ")") if self.context else ")")
 
     def calc_dependencies(self):
         dependencies = set()
@@ -47,39 +47,50 @@ class SourceProject:
     def mvn(self, pom, args):
         cwbar.cmd.execute(os.path.expanduser(cwbar.settings.MVN) + " -q -T1.0C -f " + pom + " " + args)
 
-    def build(self, only_this, clean, quick):
+    def build(self, only_this, clean, quick, full_distribution):
         if only_this:
-            self.build_only_this(clean, quick)
+            self.build_only_this(clean, quick, full_distribution, True)
         else:
-            self.build_with_dependencies(clean, quick)
+            self.build_with_dependencies(clean, quick, full_distribution)
 
-    def build_only_this(self, clean, quick, force_add_distribution=False):
+    def build_only_this(self, clean, quick, full_distribution, force_add_distribution):
         if quick:
-            return self.build_quick(clean, force_add_distribution)
+            return self.build_quick(clean, full_distribution, force_add_distribution)
         else:
             self.mvn(self.get_pom(), (" clean " if clean else "") + "install")
             self.touch_marker()
             return True
 
-    def build_with_dependencies(self, clean, quick):
+    def build_with_dependencies(self, clean, quick, full_distribution):
         dependencies_to_build = self.dependencies_to_build()
         print("With dependencies " + str(dependencies_to_build))
         force_add_distribution = False
         for dependency in dependencies_to_build:
-            force_add_distribution = dependency.build_only_this(clean, quick, False) or force_add_distribution
-        return self.build_only_this(clean, quick, force_add_distribution)
+            force_add_distribution = dependency.build_only_this(clean, quick, full_distribution, False) or \
+                                     force_add_distribution
+        return self.build_only_this(clean, quick, full_distribution, force_add_distribution)
 
-    def build_compound(self, clean):
+    def build_compound(self, clean, full_distribution):
         pom = self.get_compound_pom()
-        distribution_projects = map(lambda x: os.path.join(self.name, x), self.get_distribution_projects())
+        distribution_projects = map(lambda x: os.path.join(self.name, x),
+                                    self.get_distribution_projects(full_distribution))
         self.mvn(pom, "-pl " + ",".join(distribution_projects) + " -am " + (
             " clean " if clean else "") + "package")
         self.touch_marker()
 
-    def build_quick(self, clean, force_add_distribution=False):
-        poms = self.get_changed_poms(force_add_distribution)
-        if poms:
-            self.mvn(self.get_pom(), "-pl " + ",".join(poms) + (" clean " if clean else "") + " install")
+    def build_quick(self, clean, force_add_distribution=False, full_distribution=False):
+        changed_poms = self.get_changed_poms()
+        distribution_poms = set(self.get_distribution_projects(full_distribution))
+        step_one_poms = changed_poms - distribution_poms
+        # distribution собираем отдельно ибо при одновременных изменениях в транзитивных зависимостях порядок сборки
+        # не может быть полнценно вычислен при частичной сборке и в distribution может быть включена старая версия из
+        # ~/.m2
+        step_two_poms = distribution_poms if force_add_distribution else changed_poms & distribution_poms
+        if step_one_poms or step_two_poms:
+            if step_one_poms:
+                self.mvn(self.get_pom(), "-pl " + ",".join(step_one_poms) + (" clean " if clean else "") + " install")
+            if step_two_poms:
+                self.mvn(self.get_pom(), "-pl " + ",".join(step_two_poms) + (" clean " if clean else "") + " install")
             self.touch_marker()
             return True
         else:
@@ -107,12 +118,12 @@ class SourceProject:
             data = f.read()
             return "<packaging>ear" in data or "<packaging>war" in data
 
-    def get_distribution_projects(self, full=False):
+    def get_distribution_projects(self, full_distribution):
         minimum_set = {"application", "middleware", "login", "api"}
         pattern = os.path.join(self.get_source_dir(), "*", "distribution*", "**", "pom.xml")
         for pom in glob.glob(pattern, recursive=True):
             pom_dir = os.path.basename(os.path.dirname(pom))
-            if self.is_distribution_pom(pom) and pom_dir != "testing" and (full or pom_dir in minimum_set):
+            if self.is_distribution_pom(pom) and pom_dir != "testing" and (full_distribution or pom_dir in minimum_set):
                 yield pom[len(self.get_source_dir()) + 1:]
 
     def get_ignored_dirs(self):
@@ -146,12 +157,9 @@ class SourceProject:
         else:
             return []
 
-    def get_changed_poms(self, force_add_distribution):
+    def get_changed_poms(self):
         changed_files = self.get_changed_files()
         changed_dirs = set(map(lambda cf: os.path.dirname(cf), changed_files))
-        if force_add_distribution or len(changed_dirs) > 0:
-            for d in self.get_distribution_projects():
-                changed_dirs.add(os.path.join(self.get_source_dir(), d))
         return set(map(lambda cd: os.path.relpath(self.get_pom_by_dir(cd), self.get_source_dir()), changed_dirs))
 
     def get_pom_by_dir(self, dir_name):
@@ -185,9 +193,9 @@ class SourceProject:
         touch_marker_file = self.get_touch_marker_file()
         pathlib.Path(touch_marker_file).touch(mode=0o777, exist_ok=True)
 
-    def get_distribution_project_targets(self, full):
-        distributions = self.get_distribution_projects(full)
-        result = []
+    def get_distribution_project_targets(self, full_distribution):
+        distributions = self.get_distribution_projects(full_distribution)
+        result = set()
         for distribution in distributions:
             target_dir = os.path.join(self.get_source_dir(), os.path.dirname(distribution), "target")
             target_files = glob.glob(os.path.join(target_dir, "*.war")) + glob.glob(os.path.join(target_dir, "*.ear"))

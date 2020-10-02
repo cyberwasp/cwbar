@@ -28,11 +28,11 @@ class SourceProjectTest(unittest.TestCase):
         pom = os.path.join(project.get_source_dir(), "pom.xml")
         time.sleep(1)
         Path(pom).touch(mode=0o777, exist_ok=True)
-        self.assertIn(os.path.relpath(pom, project.get_source_dir()), project.get_changed_poms(False))
+        self.assertIn(os.path.relpath(pom, project.get_source_dir()), project.get_changed_poms())
 
     def test_source_project_build(self):
         project = cwbar.source_project.SourceProject.get_project("project-c")
-        self.assertEqual(project.build_with_dependencies(False, False), True)
+        self.assertEqual(project.build_with_dependencies(False, False, False), True)
 
     def test_source_project_build_quick(self):
         project = cwbar.source_project.SourceProject.get_project("project-c")
@@ -43,8 +43,10 @@ class SourceProjectTest(unittest.TestCase):
 
     def test_source_project_get_distributions(self):
         project = cwbar.source_project.SourceProject.get_project("project-d")
-        self.assertEqual(list(project.get_distribution_projects()), ["d/distribution/application/pom.xml"])
+        self.assertEqual(list(project.get_distribution_projects(False)), ["d/distribution/application/pom.xml"])
         self.assertEqual(list(project.get_distribution_projects(True)), ["d/distribution/application/pom.xml",
                                                                          "d/distribution/main/pom.xml"])
+
+
 if __name__ == '__main__':
     unittest.main()
