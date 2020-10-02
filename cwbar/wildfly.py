@@ -92,3 +92,25 @@ class Wildfly:
 
     def dstart(self):
         cwbar.cmd.execute(os.path.join(self._home_dir, "bin", "domain.sh"))
+
+    def start(self, prod=False):
+        props = self.get_properties()
+        cmd = os.path.join(self._home_dir, "bin", "standalone.bat" if os.name == "nt" else "standalone.sh")
+        cmd += " -Dfile.encoding=UTF-8"
+        cmd += (" " + props.get("jboss.java.opts", ""))
+        cmd += (" -Djboss.node.name=" + props.get("jboss.node.name", "node1"))
+        cmd += (" -Djboss.server.base.dir=" + props.get("jboss.bind.address", self.get_base_dir()))
+        cmd += (" -Djboss.socket.binding.port-offset=" + props.get("jboss.socket.binding.port-offset", "0"))
+        cmd += (" -b " + props.get("jboss.socket.binding.port-offset", "0.0.0.0"))
+        cmd += (" -bmanagement " + props.get("jboss.bind.address.management", "0.0.0.0" if not prod else "127.0.0.1"))
+        cmd += (" -u " + props.get("jboss.unicast.address", "230.0.0.4"))
+        cmd += (" -c " + props.get("jboss.config.file", "standalone-full.xml"))
+        if not prod:
+            cmd += (" " + props.get("jboss.java.debug.opts", ""))
+        cwbar.cmd.execute(cmd)
+
+    def get_base_dir(self):
+        return os.path.join(self._home_dir, "standalone")
+
+    def get_properties(self):
+        return {}
