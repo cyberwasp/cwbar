@@ -6,7 +6,7 @@ from pathlib import Path
 import cwbar.source_project
 import cwbar.settings
 
-cwbar.settings.BASE_SOURCES = os.path.abspath(os.path.join("data", "sources"))
+cwbar.settings.BASE_SOURCES = os.path.join(os.path.dirname(__file__), "data", "sources")
 
 
 class SourceProjectTest(unittest.TestCase):

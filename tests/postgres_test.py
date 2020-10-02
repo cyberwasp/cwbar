@@ -4,7 +4,7 @@ import unittest
 import cwbar.settings
 import cwbar.postgres
 
-cwbar.settings.PG_PASS = os.path.abspath(os.path.join("data", "pgpass"))
+cwbar.settings.PG_PASS = os.path.join(os.path.dirname(__file__), "data", "pgpass")
 
 
 class SourceProjectTest(unittest.TestCase):
