@@ -142,7 +142,7 @@ class SourceProject:
         elif self.name == "fileserver":
             return ["selenium-tests"]
         elif self.name == "fkc":
-            return ["fkc-it"]
+            return ["fkc-it", "fkc/integration/puot-client"]
         else:
             return []
 
@@ -152,7 +152,7 @@ class SourceProject:
         if force_add_distribution or len(changed_dirs) > 0:
             for d in self.get_distribution_projects():
                 changed_dirs.add(os.path.join(self.get_source_dir(), d))
-        return list(map(lambda cd: os.path.relpath(self.get_pom_by_dir(cd), self.get_source_dir()), changed_dirs))
+        return set(map(lambda cd: os.path.relpath(self.get_pom_by_dir(cd), self.get_source_dir()), changed_dirs))
 
     def get_pom_by_dir(self, dir_name):
         while dir_name != self.get_source_dir():
