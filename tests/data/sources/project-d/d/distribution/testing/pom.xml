@@ -8,4 +8,9 @@
     </parent>
     <artifactId>d-d-distribution-testing</artifactId>
     <packaging>war</packaging>
+
+    <build>
+        <finalName>testing</finalName>
+    </build>
+
 </project>

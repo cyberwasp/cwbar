@@ -201,5 +201,5 @@ class SourceProject:
             target_files = glob.glob(os.path.join(target_dir, "*.war")) + glob.glob(os.path.join(target_dir, "*.ear"))
             if len(target_files) == 0:
                 raise Exception("Проект " + distribution + " не собран")
-            result += target_files
+            result = result | set(target_files)
         return result

@@ -49,6 +49,18 @@ class SourceProjectTest(unittest.TestCase):
         self.assertEqual(set(project.get_distribution_projects(True)), {"d/distribution/application/pom.xml",
                                                                         "d/distribution/main/pom.xml"})
 
+    def test_source_project_get_distribution_project_targets(self):
+        project = cwbar.source_project.SourceProject.get_project("project-d")
+        project.build(True, True, False, True)
+
+        def fp(p): return os.path.join(project.get_source_dir(), p)
+
+        self.assertEqual(set(project.get_distribution_project_targets(False)),
+                         {fp("d/distribution/application/target/application.war")})
+        self.assertEqual(set(project.get_distribution_project_targets(True)),
+                         {fp("d/distribution/application/target/application.war"),
+                          fp("d/distribution/main/target/main.ear")})
+
 
 if __name__ == '__main__':
     unittest.main()

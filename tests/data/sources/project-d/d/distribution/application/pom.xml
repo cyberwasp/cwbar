@@ -9,4 +9,9 @@
     </parent>
     <artifactId>d-d-distribution-application</artifactId>
     <packaging>war</packaging>
+
+    <build>
+        <finalName>application</finalName>
+    </build>
+
 </project>

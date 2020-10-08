@@ -26,22 +26,7 @@ with open(sys.argv[1]) as f:
         if not size_greater(lines, 20):
             continue
 
-        if line_contains(lines, ".RightInfoProviderImpl.getPermissionCollection"):
-            continue
-
-        if line_contains(lines, "DataBaseMultiLockInfoProvider"):
-            continue
-
-        if line_contains(lines, "refreshUser"):
-            continue
-
-        if line_contains(lines, "writeStats"):
-            continue
-
-        if line_contains(lines, "SemaphoreArrayListManagedConnectionPool"):
-            continue
-
-        if line_contains(lines, "getPasswordState"):
+        if not line_contains(lines, "reporting"):
             continue
 
         print(stack_trace)

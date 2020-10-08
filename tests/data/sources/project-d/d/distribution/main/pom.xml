@@ -8,4 +8,8 @@
     </parent>
     <artifactId>d-d-distribution-main</artifactId>
     <packaging>ear</packaging>
+
+    <build>
+        <finalName>main</finalName>
+    </build>
 </project>
