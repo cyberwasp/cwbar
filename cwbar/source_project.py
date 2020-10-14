@@ -78,14 +78,14 @@ class SourceProject:
             " clean " if clean else "") + "package")
         self.touch_marker()
 
-    def build_quick(self, clean, force_add_distribution=False, full_distribution=False):
+    def build_quick(self, clean, full_distribution=False, force_add_distribution=False):
         changed_poms = self.get_changed_poms()
         distribution_poms = set(self.get_distribution_projects(full_distribution))
         step_one_poms = changed_poms - distribution_poms
         # distribution собираем отдельно ибо при одновременных изменениях в транзитивных зависимостях порядок сборки
         # не может быть полнценно вычислен при частичной сборке и в distribution может быть включена старая версия из
         # ~/.m2
-        step_two_poms = distribution_poms if force_add_distribution else changed_poms & distribution_poms
+        step_two_poms = distribution_poms if force_add_distribution else (changed_poms & distribution_poms)
         if step_one_poms or step_two_poms:
             if step_one_poms:
                 self.mvn(self.get_pom(), "-pl " + ",".join(step_one_poms) + (" clean " if clean else "") + " install")
