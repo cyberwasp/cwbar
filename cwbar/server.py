@@ -156,6 +156,6 @@ class Server:
             print("Сервер не запущен")
 
     def props(self):
-        conf_file_name = os.path.join(self.get_server_dir(), "jboss.properties");
+        conf_file_name = os.path.join(self.get_server_dir(), "jboss.properties")
         cmd = "vim " + conf_file_name
         cwbar.cmd.execute(cmd)
