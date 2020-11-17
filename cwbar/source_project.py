@@ -85,7 +85,8 @@ class SourceProject:
         # distribution собираем отдельно ибо при одновременных изменениях в транзитивных зависимостях порядок сборки
         # не может быть полнценно вычислен при частичной сборке и в distribution может быть включена старая версия из
         # ~/.m2
-        step_two_poms = distribution_poms if force_add_distribution else (changed_poms & distribution_poms)
+        force_add_distribution = force_add_distribution or len(step_one_poms) > 0
+        step_two_poms = distribution_poms if force_add_distribution else changed_poms & distribution_poms
         if step_one_poms or step_two_poms:
             if step_one_poms:
                 self.mvn(self.get_pom(), "-pl " + ",".join(step_one_poms) + (" clean " if clean else "") + " install")
