@@ -20,6 +20,12 @@ class LogFileEntry:
         return self.date + " " + self.time + " " + self.level + " " + "[" + self.source + \
                "] (" + self.thread + ") " + self.message
 
+    def before(self, date):
+        return self.date <= date
+
+    def after(self, date):
+        return self.date >= date
+
 
 def _get_log_file_content(file_name):
     if file_name.endswith(".gz"):
