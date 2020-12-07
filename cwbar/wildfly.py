@@ -11,8 +11,9 @@ from cwbar import wildfly_log
 
 class Wildfly:
 
-    def __init__(self, home_dir):
+    def __init__(self, home_dir, properties):
         self._home_dir = home_dir
+        self.properties = properties
         self._config = None
 
     def get_conf_file_name(self):
@@ -43,8 +44,8 @@ class Wildfly:
 
     def cli(self, *args):
         print("Running cli: " + self._home_dir + " " + " ".join(args))
-        cmd = os.path.join(self._home_dir, "bin", "jboss-cli.sh")
-        cwbar.cmd.execute(cmd + " " + " ".join(args))
+        cmd = os.path.join(self._home_dir, "bin", "jboss-cli.sh", )
+        cwbar.cmd.execute(cmd + " -c --controller=localhost:" + str(self.port(9990)) + " ".join(args))
 
     def kill(self):
         for pid in self.get_servers_pids():
@@ -54,7 +55,7 @@ class Wildfly:
     def log(self, yesterday, clean, filter_string):
         log_file_name = self.get_log_file_name(yesterday)
         if not clean:
-            if not filter:
+            if not filter_string:
                 cmd = "vim " + log_file_name
                 cwbar.cmd.execute(cmd)
             else:
@@ -94,7 +95,7 @@ class Wildfly:
         cwbar.cmd.execute(os.path.join(self._home_dir, "bin", "domain.sh"))
 
     def start(self, prod=False):
-        props = self.get_properties()
+        props = self.properties
         cmd = os.path.join(self._home_dir, "bin", "standalone.bat" if os.name == "nt" else "standalone.sh")
         cmd += " -Dfile.encoding=UTF-8"
         cmd += (" " + props.get("jboss.java.opts", ""))
@@ -112,5 +113,5 @@ class Wildfly:
     def get_base_dir(self):
         return os.path.join(self._home_dir, "standalone")
 
-    def get_properties(self):
-        return {}
+    def port(self, base_port):
+        return base_port + int(self.properties.get("jboss.socket.binding.port-offset", "0"))

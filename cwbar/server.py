@@ -23,12 +23,35 @@ class Server:
     def get_server_dir(self):
         return os.path.realpath(os.path.join(cwbar.settings.BASE_COMPILE, self.name))
 
+    def get_props_file_name(self):
+        return os.path.join(self.get_server_dir(), "jboss.properties")
+
     def get_wildfly_dir_name(self):
         return glob.glob(os.path.join(self.get_server_dir(), "jboss-*"))[0]
 
+    def get_props(self):
+        props_file_name = self.get_props_file_name()
+        result = {}
+        prev_line = ""
+        with open(props_file_name, encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if line.startswith("#"):
+                    continue
+                if line.endswith("\\"):
+                    prev_line += line[:-1]
+                    continue
+                if prev_line:
+                    line = prev_line + line
+                p = line.index("=")
+                if p > 0:
+                    result[line[:p].strip()] = line[p + 1:].strip()
+        return result
+
     def wf(self):
         wildfly_dir_name = self.get_wildfly_dir_name()
-        return cwbar.wildfly.Wildfly(wildfly_dir_name)
+        wildfly_props = self.get_props()
+        return cwbar.wildfly.Wildfly(wildfly_dir_name, wildfly_props)
 
     def get_db_set(self):
         wildfly = self.wf()
@@ -111,7 +134,6 @@ class Server:
             print(d)
         print("Ends: " + str(datetime.datetime.now()))
 
-
     def deploy(self, full=False, deployments: list = None):
         print("Deploy: " + self.type)
         project = self.sp()
@@ -151,6 +173,6 @@ class Server:
             print("Сервер не запущен")
 
     def props(self):
-        conf_file_name = os.path.join(self.get_server_dir(), "jboss.properties")
-        cmd = "vim " + conf_file_name
+        props_file_name = self.get_props_file_name()
+        cmd = "vim " + props_file_name
         cwbar.cmd.execute(cmd)
