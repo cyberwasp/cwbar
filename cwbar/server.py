@@ -71,11 +71,6 @@ class Server:
     def config(self):
         self.wf().config()
 
-    def jconfig(self):
-        conf_file_name = os.path.join(self.get_server_dir(), "jboss.properties")
-        cmd = "vim " + conf_file_name
-        cwbar.cmd.execute(cmd)
-
     def start(self):
         self.kd().start()
 
