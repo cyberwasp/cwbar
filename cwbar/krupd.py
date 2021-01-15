@@ -12,8 +12,8 @@ class Krupd:
         cmd = " ".join([os.path.join(self.root_dir, "krupd")] + list(args))
         cwbar.cmd.execute(cmd)
 
-    def start(self):
-        self.krupd("jboss.start.debug")
+    def start(self, no_spawn=False):
+        self.krupd("jboss.start.debug" + (".nospawn" if no_spawn else ""))
 
     def stop(self):
         self.krupd("jboss.stop")

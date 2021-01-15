@@ -94,8 +94,8 @@ class Server:
     def config(self):
         self.wf().config()
 
-    def start(self):
-        self.kd().start()
+    def start(self, no_spawn=False):
+        self.kd().start(no_spawn)
 
     def stop(self):
         self.kd().stop()
