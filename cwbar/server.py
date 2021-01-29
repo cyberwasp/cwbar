@@ -111,12 +111,12 @@ class Server:
     def cli(self, *args):
         self.wf().cli(*args)
 
-    def restart(self, soft=False):
+    def restart(self, soft=False, no_spawn=False):
         if soft:
             self.stop()
         else:
             self.kill()
-        self.start()
+        self.start(no_spawn)
 
     def build(self, only=False, non_clean=False, full=False):
         print("Full build: " + self.type)
