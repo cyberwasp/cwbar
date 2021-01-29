@@ -11,6 +11,7 @@ import cwbar.source_project
 import cwbar.wildfly
 import cwbar.arguments
 import cwbar.cmd
+from cwbar.jstack import JStack
 
 
 class Server:
@@ -47,6 +48,10 @@ class Server:
                 if p > 0:
                     result[line[:p].strip()] = line[p + 1:].strip()
         return result
+
+    def get_pid(self):
+        pids = list(self.wf().get_servers_pids(verbose=False))
+        return pids[0]
 
     def wf(self):
         wildfly_dir_name = self.get_wildfly_dir_name()
@@ -176,3 +181,16 @@ class Server:
         props_file_name = self.get_props_file_name()
         cmd = "vim " + props_file_name
         cwbar.cmd.execute(cmd)
+
+    def jstack(self, file_name=None, filter_string="s.all_tags('krista')", content="no"):
+        pid = self.get_pid() if not file_name else None
+        jstack = JStack(file_name, pid, filter_string)
+        tags = jstack.get_tags_map()
+        if content == "yes":
+            for stack_trace in jstack.stack_traces:
+                print(stack_trace)
+                print("\n")
+        print("total:", len(jstack.stack_traces))
+        for tag in tags:
+            print("    " + tag + ": " + str(len(tags.get(tag))))
+

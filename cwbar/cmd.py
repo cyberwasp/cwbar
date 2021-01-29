@@ -9,14 +9,15 @@ def execute(cmd):
         raise Exception("Ошибка выполениния команды " + cmd)
 
 
-def execute_with_output(cmd, verbose=True):
+def execute_with_output(cmd, verbose=True, split=True):
     if verbose:
         print(cmd)
     process = subprocess.Popen(
         args=cmd,
         stdout=subprocess.PIPE,
         shell=True)
-    return process.communicate()[0].decode("utf-8").split("\n")
+    output = process.communicate()[0].decode("utf-8")
+    return output.split("\n") if split else output
 
 
 def execute_with_input(cmd, input_data, verbose=True):
