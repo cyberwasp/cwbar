@@ -130,3 +130,28 @@ class JStack:
                         yield [stack_trace, stack_trace_other]
                 else:
                     yield [stack_trace, stack_trace_other]
+
+
+def find_long_operations(dir_name, start_time, end_time):
+    file_names = []
+    with os.scandir(dir_name) as it:
+        for entry in it:
+            if entry.is_file():
+                mtime = datetime.fromtimestamp(entry.stat().st_mtime)
+                if start_time <= mtime <= end_time:
+                    file_names.append(os.path.join(dir_name, entry.name))
+
+        jstack_list = sorted(map(lambda x: JStack(x), file_names), key=lambda x: x.date)
+
+        linked = dict()
+        for i in range(1, len(jstack_list)):
+            j_stack1 = jstack_list[0]
+            j_stack2 = jstack_list[1]
+            for s1, s2 in j_stack1.compare(j_stack2, 20, "s.contains_any('at ru.krista')"):
+                old = linked.get(s1.tid)
+                if old:
+                    s1_old, s2_old = old
+                    d_old = s2_old.time - s2_old.time
+                    d = s2.time - s1.time
+
+                    linked[s1.tid] = s1_old, s2

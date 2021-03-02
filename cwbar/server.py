@@ -11,6 +11,7 @@ import cwbar.source_project
 import cwbar.wildfly
 import cwbar.arguments
 import cwbar.cmd
+from cwbar import props
 from cwbar.jstack import JStack
 
 
@@ -32,22 +33,7 @@ class Server:
 
     def get_props(self):
         props_file_name = self.get_props_file_name()
-        result = {}
-        prev_line = ""
-        with open(props_file_name, encoding="utf-8") as f:
-            for line in f:
-                line = line.strip()
-                if line.startswith("#"):
-                    continue
-                if line.endswith("\\"):
-                    prev_line += line[:-1]
-                    continue
-                if prev_line:
-                    line = prev_line + line
-                p = line.index("=")
-                if p > 0:
-                    result[line[:p].strip()] = line[p + 1:].strip()
-        return result
+        return props.parse_file(props_file_name)
 
     def get_pid(self):
         pids = list(self.wf().get_servers_pids(verbose=False))
