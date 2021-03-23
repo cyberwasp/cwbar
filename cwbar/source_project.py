@@ -154,7 +154,7 @@ class SourceProject:
         elif self.name == "fileserver":
             return ["selenium-tests"]
         elif self.name == "fkc":
-            return ["fkc-it", "fkc/integration/puot-client"]
+            return ["fkc-it", "fkc/integration/puot-client", "javister"]
         else:
             return []
 
