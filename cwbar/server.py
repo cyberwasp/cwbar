@@ -155,7 +155,7 @@ class Server:
                 pg.psql()
                 return
 
-    def profile(self, duration=30, output_file_name="/tmp/profile_result.svg"):
+    def profile(self, duration=30, output_file_name="/tmp/profile_result.html"):
         pids = list(self.wf().get_servers_pids(verbose=False))
         if pids:
             profiler = cwbar.async_profiler.AsyncProfiler(pids[0])
