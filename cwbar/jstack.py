@@ -14,7 +14,7 @@ def get_tid(line):
     if r:
         return r.group(1)
     else:
-        raise Exception("Не найден tid")
+        raise Exception("Не найден tid в строке" + line)
 
 
 def get_name(line):
