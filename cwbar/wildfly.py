@@ -6,7 +6,7 @@ from datetime import timedelta, datetime
 
 import cwbar.cmd
 import cwbar.wildfly_config
-from cwbar import wildfly_log
+from cwbar import wildfly_log, settings
 
 
 class Wildfly:
@@ -31,7 +31,7 @@ class Wildfly:
         return os.path.join(self._home_dir, "standalone", "deployments")
 
     def get_servers_pids(self, verbose=True):
-        cmd = "jps -m"
+        cmd = os.path.expanduser(os.path.join(settings.JAVA_HOME, "bin/", "jps")) + " -m"
         for ps in cwbar.cmd.execute_with_output(cmd, verbose):
             if self._home_dir in ps:
                 yield re.match(r"^(\d+)", ps).group(0)
