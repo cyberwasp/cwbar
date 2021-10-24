@@ -11,7 +11,7 @@ import cwbar.source_project
 import cwbar.wildfly
 import cwbar.arguments
 import cwbar.cmd
-from cwbar import props
+from cwbar import props, settings
 from cwbar.jstack import JStack
 
 
@@ -85,7 +85,9 @@ class Server:
     def config(self):
         self.wf().config()
 
-    def start(self, no_spawn=False):
+    def start(self, no_spawn=False, jdk=None):
+        if jdk:
+            os.environ["JAVA_HOME"] = os.path.expanduser(jdk)
         self.kd().start(no_spawn)
 
     def stop(self):
@@ -97,7 +99,9 @@ class Server:
     def cli(self, *args):
         self.wf().cli(*args)
 
-    def restart(self, soft=False, no_spawn=False):
+    def restart(self, soft=False, no_spawn=False, jdk=None):
+        if jdk:
+            os.environ["JAVA_HOME"] = os.path.expanduser(jdk)
         if soft:
             self.stop()
         else:
@@ -179,4 +183,3 @@ class Server:
         print("total:", len(jstack.stack_traces))
         for tag in tags:
             print("    " + tag + ": " + str(len(tags.get(tag))))
-
