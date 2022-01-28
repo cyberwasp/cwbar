@@ -72,6 +72,8 @@ class StackTrace:
             tags.append("operation-log-write-db")
         if self.contains_any("updatePresetById"):
             tags.append("preset-write-db")
+        if self.contains_any("marshalling"):
+            tags.append("marshalling")
         return tags
 
     def size(self):
