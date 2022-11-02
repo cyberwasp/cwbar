@@ -40,14 +40,7 @@ class StackTrace:
 
     def tags(self):
         tags = []
-        if len(self.lines) > 1 and "RUNNABLE" in self.lines[1]:
-            tags.append("runnable")
-        if len(self.lines) > 1 and "BLOCKED" in self.lines[1]:
-            tags.append("blocked")
-        if self.contains_any("at ru.krista"):
-            tags.append("krista")
-        if self.contains_any(".ejb3.", ".callTimeout"):
-            tags.append("ejb")
+        # предметные теги
         if self.contains_any('CrossDocumentControl'):
             tags.append("cross-control")
         if self.contains_any('SimpleDocumentControl'):
@@ -74,6 +67,33 @@ class StackTrace:
             tags.append("preset-write-db")
         if self.contains_any("marshalling"):
             tags.append("marshalling")
+        if self.contains_any("GridServlet"):
+            tags.append("grid")
+        if self.contains_any("GridServlet.processLoad"):
+            tags.append("grid-load")
+        if self.contains_any("JsonInterfaceServlet"):
+            tags.append("form-open")
+        if self.contains_any("Hashtable.get"):
+            tags.append("hashtable-get")
+        if self.contains_any("QueryExecutorImpl.execute"):
+            tags.append("exec-sql")
+        if self.contains_any("CheckValidConnectionSQL.isValidConnection"):
+            tags.append("db-connection-check")
+        if self.contains_any("mcp.Semaphore.tryAcquire"):
+            tags.append("db-connection-waiting")
+        if not tags:
+            tags.append("unknown")
+
+        # системные теги
+        if len(self.lines) > 1 and "RUNNABLE" in self.lines[1]:
+            tags.append("runnable")
+        if len(self.lines) > 1 and "BLOCKED" in self.lines[1]:
+            tags.append("blocked")
+        if self.contains_any("at ru.krista"):
+            tags.append("krista")
+        if self.contains_any(".ejb3.", ".callTimeout"):
+            tags.append("ejb")
+
         return tags
 
     def size(self):
