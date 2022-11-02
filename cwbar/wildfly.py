@@ -6,14 +6,15 @@ from datetime import timedelta, datetime
 
 import cwbar.cmd
 import cwbar.wildfly_config
-from cwbar import wildfly_log, settings
+from cwbar import wildfly_log, settings, vim
 
 
 class Wildfly:
 
-    def __init__(self, home_dir, properties):
+    def __init__(self, home_dir, properties, ssh):
         self._home_dir = home_dir
         self.properties = properties
+        self.ssh = ssh
         self._config = None
 
     def get_conf_file_name(self):
@@ -74,8 +75,7 @@ class Wildfly:
 
     def config(self):
         conf_file_name = self.get_conf_file_name()
-        cmd = "vim " + conf_file_name
-        cwbar.cmd.execute(cmd)
+        vim.edit_file(self.ssh, conf_file_name)
 
     def deploy(self, project, full, deployments):
         targets = project.get_distribution_project_targets(full)

@@ -11,7 +11,7 @@ import cwbar.source_project
 import cwbar.wildfly
 import cwbar.arguments
 import cwbar.cmd
-from cwbar import props, settings
+from cwbar import props, settings, vim
 from cwbar.jstack import JStack
 
 
@@ -20,10 +20,13 @@ class Server:
     def __init__(self, server_type, name=None, ssh=None):
         self.type = server_type
         self.name = name if name else self.type
-        self.ssh = ssh + "-" + type if ssh else None
+        self.ssh = ssh + "-" + self.type if ssh else None
 
     def get_server_dir(self):
-        return os.path.realpath(os.path.join(cwbar.settings.BASE_COMPILE, self.name))
+        if self.ssh:
+            return os.path.join(cwbar.settings.BASE_COMPILE, self.name)
+        else:
+            return os.path.realpath(os.path.join(cwbar.settings.BASE_COMPILE, self.name))
 
     def get_props_file_name(self):
         return os.path.join(self.get_server_dir(), "jboss.properties")
@@ -42,7 +45,7 @@ class Server:
     def wf(self):
         wildfly_dir_name = self.get_wildfly_dir_name()
         wildfly_props = self.get_props()
-        return cwbar.wildfly.Wildfly(wildfly_dir_name, wildfly_props)
+        return cwbar.wildfly.Wildfly(wildfly_dir_name, wildfly_props, self.ssh)
 
     def get_db_set(self):
         wildfly = self.wf()
@@ -169,8 +172,7 @@ class Server:
 
     def props(self):
         props_file_name = self.get_props_file_name()
-        cmd = "vim " + props_file_name
-        cwbar.cmd.execute(cmd)
+        vim.edit_file(self.ssh, props_file_name)
 
     def jstack(self, file_name=None, filter_string="s.all_tags('krista')", content="no"):
         pid = self.get_pid() if not file_name else None
