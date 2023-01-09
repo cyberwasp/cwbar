@@ -2,11 +2,13 @@ import glob
 import os
 import re
 import shutil
-from datetime import timedelta, datetime
+import datetime
 
 import cwbar.cmd
-import cwbar.wildfly_config
-from cwbar import wildfly_log, settings, vim
+import cwbar.wildfly.config
+import cwbar.wildfly.log
+import cwbar.config
+import cwbar.vim
 
 
 class Wildfly:
@@ -25,14 +27,14 @@ class Wildfly:
     def get_log_file_name(self, yesterday):
         suffix = ""
         if yesterday:
-            suffix = "." + datetime.strftime(datetime.now() - timedelta(1), '%Y-%m-%d')
+            suffix = "." + datetime.datetime.strftime(datetime.datetime.now() - datetime.timedelta(1), '%Y-%m-%d')
         return glob.glob(os.path.join(self._home_dir, "standalone", "log", "server.log" + suffix))[0]
 
     def get_deployment_dir(self):
         return os.path.join(self._home_dir, "standalone", "deployments")
 
     def get_servers_pids(self, verbose=True):
-        cmd = os.path.expanduser(os.path.join(settings.JAVA_HOME, "bin/", "jps")) + " -m"
+        cmd = os.path.expanduser(os.path.join(cwbar.config.JAVA_HOME, "bin/", "jps")) + " -m"
         for ps in cwbar.cmd.execute_with_output(cmd, verbose):
             if self._home_dir in ps:
                 yield re.match(r"^(\d+)", ps).group(0)
@@ -40,7 +42,7 @@ class Wildfly:
     def get_config(self):
         if not self._config:
             dirname = os.path.dirname(self._home_dir)
-            self._config = cwbar.wildfly_config.WildflyConfig(dirname, self.get_conf_file_name())
+            self._config = cwbar.wildfly.config.WildflyConfig(dirname, self.get_conf_file_name())
         return self._config
 
     def cli(self, *args):
@@ -60,7 +62,8 @@ class Wildfly:
                 cmd = "vim " + log_file_name
                 cwbar.cmd.execute(cmd)
             else:
-                content = "\n".join(map(lambda x: str(x), wildfly_log.LogFile(log_file_name).filter(filter_string)))
+                log_file = cwbar.wildfly.log.LogFile(log_file_name)
+                content = "\n".join(map(lambda x: str(x), log_file.filter(filter_string)))
                 cmd = "vim - << EOF\n" + content + "\nEOF\n"
                 cwbar.cmd.execute(cmd)
         else:
@@ -75,7 +78,7 @@ class Wildfly:
 
     def config(self):
         conf_file_name = self.get_conf_file_name()
-        vim.edit_file(self.ssh, conf_file_name)
+        cwbar.vim.edit_file(self.ssh, conf_file_name)
 
     def deploy(self, project, full, deployments):
         targets = project.get_distribution_project_targets(full)

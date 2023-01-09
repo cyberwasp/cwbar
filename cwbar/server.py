@@ -3,16 +3,18 @@ import glob
 import os
 import re
 
-import cwbar.async_profiler
+import cwbar.java.profiler
 import cwbar.krupd
 import cwbar.postgres
-import cwbar.settings
-import cwbar.source_project
-import cwbar.wildfly
+import cwbar.config
+import cwbar.source.project
+import cwbar.wildfly.wildfly
 import cwbar.arguments
 import cwbar.cmd
-from cwbar import props, settings, vim
-from cwbar.jstack import JStack
+import cwbar.props
+import cwbar.config
+import cwbar.vim
+import cwbar.java.jstack
 
 
 class Server:
@@ -24,9 +26,9 @@ class Server:
 
     def get_server_dir(self):
         if self.ssh:
-            return os.path.join(cwbar.settings.BASE_COMPILE, self.name)
+            return os.path.join(cwbar.config.BASE_COMPILE, self.name)
         else:
-            return os.path.realpath(os.path.join(cwbar.settings.BASE_COMPILE, self.name))
+            return os.path.realpath(os.path.join(cwbar.config.BASE_COMPILE, self.name))
 
     def get_props_file_name(self):
         return os.path.join(self.get_server_dir(), "jboss.properties")
@@ -36,7 +38,7 @@ class Server:
 
     def get_props(self):
         props_file_name = self.get_props_file_name()
-        return props.parse_file(props_file_name)
+        return cwbar.props.parse_file(props_file_name)
 
     def get_pid(self):
         pids = list(self.wf().get_servers_pids(verbose=False))
@@ -45,7 +47,7 @@ class Server:
     def wf(self):
         wildfly_dir_name = self.get_wildfly_dir_name()
         wildfly_props = self.get_props()
-        return cwbar.wildfly.Wildfly(wildfly_dir_name, wildfly_props, self.ssh)
+        return cwbar.wildfly.wildfly.Wildfly(wildfly_dir_name, wildfly_props, self.ssh)
 
     def get_db_set(self):
         wildfly = self.wf()
@@ -77,10 +79,10 @@ class Server:
         return cwbar.krupd.Krupd(root_dir)
 
     def sp(self):
-        return cwbar.source_project.SourceProject.get_project(self.type)
+        return cwbar.source.project.SourceProject.get_project(self.type)
 
-    def log(self, yesterday=False, clean=False, filter=None):
-        self.wf().log(yesterday, clean, filter)
+    def log(self, yesterday=False, clean=False, filter_string=None):
+        self.wf().log(yesterday, clean, filter_string)
 
     def log_tail(self):
         self.wf().log_tail()
@@ -165,18 +167,18 @@ class Server:
     def profile(self, duration=30, output_file_name="/tmp/profile_result.html"):
         pids = list(self.wf().get_servers_pids(verbose=False))
         if pids:
-            profiler = cwbar.async_profiler.AsyncProfiler(pids[0])
+            profiler = cwbar.java.profiler.AsyncProfiler(pids[0])
             profiler.profile(int(duration), output_file_name)
         else:
             print("Сервер не запущен")
 
     def props(self):
         props_file_name = self.get_props_file_name()
-        vim.edit_file(self.ssh, props_file_name)
+        cwbar.vim.edit_file(self.ssh, props_file_name)
 
     def jstack(self, file_name=None, filter_string="s.all_tags('krista')", content="no"):
         pid = self.get_pid() if not file_name else None
-        jstack = JStack(file_name, pid, filter_string)
+        jstack = cwbar.java.jstack.JStack(file_name, pid, filter_string)
         tags = jstack.get_tags_map()
         if content == "yes":
             for stack_trace in jstack.stack_traces:

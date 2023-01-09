@@ -3,7 +3,7 @@ import os
 import re
 import shutil
 
-from lxml import etree
+import lxml.etree
 
 
 class DataSourceConfig:
@@ -61,7 +61,7 @@ class WildflyConfig:
     def __init__(self, server_name, file_name):
         self.server_name = server_name
         self.file_name = file_name
-        self.tree = etree.parse(file_name)
+        self.tree = lxml.etree.parse(file_name)
 
     def get_data_sources(self):
         for node in self.tree.getroot().findall("{*}profile/{*}subsystem/{*}datasources/{*}datasource"):

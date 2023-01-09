@@ -1,7 +1,7 @@
 import os
 import unittest
 
-from cwbar.wildfly_config import WildflyConfig
+from cwbar.wildfly.config import WildflyConfig
 
 
 class WildflyConfigTest(unittest.TestCase):

@@ -4,7 +4,7 @@ import re
 import pathlib
 
 import cwbar.cmd
-import cwbar.settings
+import cwbar.config
 
 
 class SourceProject:
@@ -44,8 +44,9 @@ class SourceProject:
         seen = set()
         return [x for x in all_dependencies if not (x in seen or seen.add(x))]
 
+    # noinspection PyMethodMayBeStatic
     def mvn(self, pom, args):
-        cwbar.cmd.execute(os.path.expanduser(cwbar.settings.MVN) + " -q -T1.0C -f " + pom + " " + args)
+        cwbar.cmd.execute(os.path.expanduser(cwbar.config.MVN) + " -q -T1.0C -f " + pom + " " + args)
 
     def build(self, only_this, clean, quick, full_distribution):
         if only_this:
@@ -83,7 +84,7 @@ class SourceProject:
         distribution_poms = set(self.get_distribution_projects(full_distribution))
         step_one_poms = changed_poms - distribution_poms
         # distribution собираем отдельно ибо при одновременных изменениях в транзитивных зависимостях порядок сборки
-        # не может быть полнценно вычислен при частичной сборке и в distribution может быть включена старая версия из
+        # не может быть полноценно вычислен при частичной сборке и в distribution может быть включена старая версия из
         # ~/.m2
         force_add_distribution = force_add_distribution or len(step_one_poms) > 0
         step_two_poms = distribution_poms if force_add_distribution else changed_poms & distribution_poms
@@ -102,10 +103,10 @@ class SourceProject:
     def get_source_dir(self):
         if self.context:
             full_name = self.context + "-" + self.name
-            full_name = os.path.expanduser(os.path.join(cwbar.settings.BASE_SOURCES, full_name))
+            full_name = os.path.expanduser(os.path.join(cwbar.config.BASE_SOURCES, full_name))
             if os.path.exists(full_name):
                 return full_name
-        return os.path.expanduser(os.path.join(cwbar.settings.BASE_SOURCES, self.name))
+        return os.path.expanduser(os.path.join(cwbar.config.BASE_SOURCES, self.name))
 
     def get_pom(self):
         return os.path.join(self.get_source_dir(), "pom.xml")

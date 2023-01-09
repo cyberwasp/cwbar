@@ -6,7 +6,7 @@ def execute(cmd):
     print(cmd)
     v = os.system(cmd)
     if v > 0:
-        raise Exception("Ошибка выполениния команды " + cmd)
+        raise Exception("Ошибка выполнения команды " + cmd)
 
 
 def execute_with_output(cmd, verbose=True, split=True):
@@ -28,5 +28,3 @@ def execute_with_input(cmd, input_data, verbose=True):
         stdin=subprocess.PIPE,
         shell=True)
     process.communicate(input_data)
-
-

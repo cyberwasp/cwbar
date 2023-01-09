@@ -3,14 +3,14 @@ import re
 import sys
 
 
-def parse_log(file_name, filter):
+def parse_log(file_name, filter_func):
     for line in open(file_name):
-        if filter(line):
+        if filter_func(line):
             yield line
 
 
 def main(file_name):
-    r = re.compile(r'(\d+\.\d+\.\d+\.\d+) - - \[(.*?)\] "GET '
+    r = re.compile(r'(\d+\.\d+\.\d+\.\d+) - - \[(.*?)] "GET '
                    r'/application/rest/messageController/getMessage\?subscriber=([\w+.%]+)&sessionId=([\w,-]+) .*?.*"')
     result = {}
     for line in parse_log(file_name, lambda l: "getMessage" in l):
