@@ -187,3 +187,12 @@ class Server:
         print("total:", len(jstack.stack_traces))
         for tag in tags:
             print("    " + tag + ": " + str(len(tags.get(tag))))
+
+    def bar(self, only=False, non_clean=False, full=False, spawn=False, quick=False):
+        self.qbuild(only, non_clean, full)
+        self.kill()
+        self.deploy(full)
+        self.start(not spawn)
+
+    def qbar(self, only=False, non_clean=False, full=False, spawn=False):
+        self.bar(only, non_clean, full, spawn, True)
