@@ -3,6 +3,8 @@ import glob
 import os
 import re
 
+import colorama
+
 import cwbar.java.profiler
 import cwbar.krupd
 import cwbar.postgres
@@ -15,6 +17,25 @@ import cwbar.props
 import cwbar.config
 import cwbar.vim
 import cwbar.java.jstack
+
+level = 0
+
+
+def comment(descr):
+    def decorator(func):
+        def wrapper(*args, **kwargs):
+            global level
+            level += 1
+            sp = (level - 1) * 2 * " "
+            print(f"{sp}{colorama.Fore.GREEN}begin {descr.lower()} {args[0].type} {colorama.Style.RESET_ALL}")
+            start = datetime.datetime.now()
+            func(*args, **kwargs)
+            end = datetime.datetime.now()
+            diff = (end - start).total_seconds()
+            print(f"{sp}{colorama.Fore.GREEN}end {descr.lower()} {str(end)[:19]} [{diff}s]{colorama.Style.RESET_ALL}")
+            level -= 1
+        return wrapper
+    return decorator
 
 
 class Server:
@@ -81,29 +102,37 @@ class Server:
     def sp(self):
         return cwbar.source.project.SourceProject.get_project(self.type)
 
+    @comment("View log")
     def log(self, yesterday=False, clean=False, filter_string=None):
         self.wf().log(yesterday, clean, filter_string)
 
+    @comment("Tail log")
     def log_tail(self):
         self.wf().log_tail()
 
+    @comment("Standalone full edit")
     def config(self):
         self.wf().config()
 
+    @comment("Start")
     def start(self, no_spawn=False, jdk=None):
         if jdk:
             os.environ["JAVA_HOME"] = os.path.expanduser(jdk)
         self.kd().start(no_spawn)
 
+    @comment("Stop")
     def stop(self):
         self.kd().stop()
 
+    @comment("Kill")
     def kill(self):
         self.wf().kill()
 
+    @comment("JBoss Cli")
     def cli(self, *args):
         self.wf().cli(*args)
 
+    @comment("Restart")
     def restart(self, soft=False, no_spawn=False, jdk=None):
         if jdk:
             os.environ["JAVA_HOME"] = os.path.expanduser(jdk)
@@ -113,41 +142,37 @@ class Server:
             self.kill()
         self.start(no_spawn)
 
+    @comment("Full build")
     def build(self, only=False, non_clean=False, full=False):
-        print("Full build: " + self.type)
         self.sp().build(only, not non_clean, False, full)
-        print("Ends: " + str(datetime.datetime.now()))
 
+    @comment("Quick build")
     def qbuild(self, only=False, non_clean=False, full=False):
-        print("Quick build: " + self.type)
         self.sp().build(only, not non_clean, True, full)
-        print("Ends: " + str(datetime.datetime.now()))
 
+    @comment("Compound pom build")
     def cbuild(self, clean=False, full=False):
-        print("Build compound pom: " + self.type)
         self.sp().build_compound(clean, full)
-        print("Ends: " + str(datetime.datetime.now()))
 
+    @comment("Distribution list")
     def dist_list(self, full=False):
-        print("Distributions list: " + self.type)
         for d in self.sp().get_distribution_projects(full):
             print(d)
-        print("Ends: " + str(datetime.datetime.now()))
 
+    @comment("Deploy")
     def deploy(self, full=False, deployments: list = None):
-        print("Deploy: " + self.type)
         project = self.sp()
         server = self.wf()
         server.deploy(project, full, deployments)
 
+    @comment("Deploy domain")
     def ddeploy(self, full=False, deployments=None):
-        print("Deploy domain: " + self.type)
         project = self.sp()
         server = self.wf()
         server.ddeploy(project, full, deployments)
 
+    @comment("Starting domain")
     def dstart(self):
-        print("Starting domain: " + self.type)
         self.wf().dstart()
 
     def pid(self):
@@ -155,6 +180,7 @@ class Server:
         if pids:
             print(pids[0])
 
+    @comment("psql")
     def sql(self):
         wildfly = self.wf()
         for data_source in wildfly.get_config().get_data_sources():
@@ -164,6 +190,7 @@ class Server:
                 pg.psql()
                 return
 
+    @comment("Async profile")
     def profile(self, duration=30, output_file_name="/tmp/profile_result.html"):
         pids = list(self.wf().get_servers_pids(verbose=False))
         if pids:
@@ -172,10 +199,12 @@ class Server:
         else:
             print("Сервер не запущен")
 
+    @comment("Edit jboss.properties")
     def props(self):
         props_file_name = self.get_props_file_name()
         cwbar.vim.edit_file(self.ssh, props_file_name)
 
+    @comment("JStack analyze")
     def jstack(self, file_name=None, filter_string="s.all_tags('krista')", content="no"):
         pid = self.get_pid() if not file_name else None
         jstack = cwbar.java.jstack.JStack(file_name, pid, filter_string)
@@ -188,11 +217,13 @@ class Server:
         for tag in tags:
             print("    " + tag + ": " + str(len(tags.get(tag))))
 
+    @comment("BAR")
     def bar(self, only=False, non_clean=False, full=False, spawn=False, quick=False):
         self.qbuild(only, non_clean, full)
         self.kill()
         self.deploy(full)
         self.start(not spawn)
 
+    @comment("QBAR")
     def qbar(self, only=False, non_clean=False, full=False, spawn=False):
         self.bar(only, non_clean, full, spawn, True)

@@ -1,4 +1,5 @@
 import os
+import colorama
 
 import cwbar.arguments
 import cwbar.server
@@ -10,6 +11,7 @@ if cwbar.config.JAVA_HOME:
 
 def main(args):
     if args[1]:
+        colorama.init()
         arguments = cwbar.arguments.Arguments(args)
         server_type = arguments.server_type()
         server_kwargs = arguments.server_kwargs()
