@@ -5,6 +5,7 @@ import pathlib
 
 import cwbar.cmd
 import cwbar.config
+import cwbar.source.config
 
 
 class SourceProject:
@@ -20,6 +21,7 @@ class SourceProject:
     def __init__(self, name, context):
         self.name = name
         self.context = context
+        self.config = cwbar.source.config.SourceProjectConfig(self.get_source_dir())
         self.dependencies = self.calc_dependencies()
 
     def __repr__(self):
@@ -122,14 +124,18 @@ class SourceProject:
 
     def get_distribution_projects(self, full_distribution):
         minimum_set = {"application", "middleware", "login", "api"}
-        pattern = os.path.join(self.get_source_dir(), "*", "distribution*", "**", "pom.xml")
+        pattern = self.config.dist_pattern
+        pattern = os.path.join(pattern) if pattern else os.path.join("*", "distribution*", "**", "pom.xml")
+        pattern = os.path.join(self.get_source_dir(),  pattern)
         for pom in glob.glob(pattern, recursive=True):
             pom_dir = os.path.basename(os.path.dirname(pom))
             if self.is_distribution_pom(pom) and pom_dir != "testing" and (full_distribution or pom_dir in minimum_set):
                 yield pom[len(self.get_source_dir()) + 1:]
 
     def get_ignored_dirs(self):
-        if self.name == "core":
+        if self.config.ignored_dirs:
+            return self.config.ignored_dirs
+        elif self.name == "core":
             return ["core/reloadable/tests/it",
                     "core/codegen/tests",
                     "core/tests",

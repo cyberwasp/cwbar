@@ -61,6 +61,10 @@ class SourceProjectTest(unittest.TestCase):
                          {fp("d/distribution/application/target/application.war"),
                           fp("d/distribution/main/target/main.ear")})
 
+    def test_source_project_with_config(self):
+        project = cwbar.source.project.SourceProject.get_project("project-e")
+        self.assertEqual(project.config.ignored_dirs, ["dir1", "dir2"])
+
 
 if __name__ == '__main__':
     unittest.main()
