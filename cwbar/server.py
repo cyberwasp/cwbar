@@ -219,7 +219,10 @@ class Server:
 
     @comment("BAR")
     def bar(self, only=False, non_clean=False, full=False, spawn=False, quick=False):
-        self.qbuild(only, non_clean, full)
+        if quick:
+            self.qbuild(only, non_clean, full)
+        else:
+            self.build(only, non_clean, full)
         self.kill()
         self.deploy(full)
         self.start(not spawn)
