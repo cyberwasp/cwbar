@@ -3,6 +3,8 @@ import os
 
 
 def _is_full_var_args(func):
+    if hasattr(func, "orig"):
+        func = func.orig
     spec = inspect.getfullargspec(func)
     return not spec.defaults and not spec.varkw
 

@@ -34,6 +34,7 @@ def comment(descr):
             diff = (end - start).total_seconds()
             print(f"{sp}{colorama.Fore.GREEN}end {descr.lower()} {str(end)[:19]} [{diff}s]{colorama.Style.RESET_ALL}")
             level -= 1
+        wrapper.orig = func
         return wrapper
     return decorator
 
