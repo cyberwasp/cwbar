@@ -48,7 +48,7 @@ class Wildfly:
     def cli(self, *args):
         print("Running cli: " + self._home_dir + " " + " ".join(args))
         cmd = os.path.join(self._home_dir, "bin", "jboss-cli.sh", )
-        cwbar.cmd.execute(cmd + " -c --controller=localhost:" + str(self.port(9990)) + " " + " ".join(args))
+        cwbar.cmd.execute(cmd + " -c --controller=localhost:" + str(self.port(9990)) + " " + " ".join(args), self.ssh)
 
     def kill(self):
         for pid in self.get_servers_pids():
