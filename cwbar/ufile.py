@@ -1,3 +1,4 @@
+import gzip
 import subprocess
 
 
@@ -14,5 +15,6 @@ class UFile:
             cat = "zcat" if local_file_name.endswith("gz") else "cat"
             return subprocess.check_output(['ssh', server_name, cat, local_file_name], encoding="utf-8")
         else:
-            with open(self.file_name, encoding="utf-8") as f:
+            l_open = gzip.open if self.file_name.endswith("gz") else open
+            with l_open(self.file_name, encoding="utf-8", mode="rt") as f:
                 return f.read()
