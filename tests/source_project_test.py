@@ -8,6 +8,7 @@ import cwbar.config
 
 cwbar.config.BASE_SOURCES = os.path.join(os.path.dirname(__file__), "data", "sources")
 cwbar.config.JAVA_HOME = None
+cwbar.config.JAVA_HOMES = {}
 cwbar.config.MVN = "mvn"
 
 

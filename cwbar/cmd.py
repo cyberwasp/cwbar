@@ -2,9 +2,11 @@ import os
 import subprocess
 
 
-def execute(cmd, ssh_server=None):
+def execute(cmd, ssh_server=None, env=None):
     cmd = (("ssh -t jboss@" + ssh_server + " ") if ssh_server else "") + cmd
     print(cmd)
+    if env:
+        os.environ.update(env)
     v = os.system(cmd)
     if v > 0:
         raise Exception("Ошибка выполнения команды " + cmd)

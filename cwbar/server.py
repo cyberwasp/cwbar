@@ -10,6 +10,7 @@ import cwbar.krupd
 import cwbar.postgres
 import cwbar.config
 import cwbar.source.project
+import cwbar.source.config
 import cwbar.wildfly.wildfly
 import cwbar.arguments
 import cwbar.cmd
@@ -45,6 +46,7 @@ class Server:
         self.type = server_type
         self.name = name if name else self.type
         self.ssh = ssh + "-" + self.type if ssh else None
+        cwbar.config.update_java_home(self.sp().config.java_version)
 
     def get_server_dir(self):
         if self.ssh:
@@ -56,7 +58,13 @@ class Server:
         return os.path.join(self.get_server_dir(), "jboss.properties")
 
     def get_wildfly_dir_name(self):
-        return glob.glob(os.path.join(self.get_server_dir(), "jboss-*"))[0]
+        res = glob.glob(os.path.join(self.get_server_dir(), "jboss-*"))
+        if len(res) > 0:
+            return res[0]
+        res = glob.glob(os.path.join(self.get_server_dir(), "wildfly-*"))
+        if len(res) > 0:
+            return res[0]
+        raise "Не найден каталог с сервером"
 
     def get_props(self):
         props_file_name = self.get_props_file_name()
@@ -215,7 +223,7 @@ class Server:
                 print(stack_trace)
                 print("\n")
         print("total:", len(jstack.stack_traces))
-        for tag in tags:
+        for tag in sorted(tags):
             print("    " + tag + ": " + str(len(tags.get(tag))))
 
     @comment("BAR")

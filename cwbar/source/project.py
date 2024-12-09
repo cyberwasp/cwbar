@@ -48,7 +48,8 @@ class SourceProject:
 
     # noinspection PyMethodMayBeStatic
     def mvn(self, pom, args):
-        cwbar.cmd.execute(os.path.expanduser(cwbar.config.MVN) + " -q -T1.0C -f " + pom + " " + args)
+        env = {}
+        cwbar.cmd.execute(os.path.expanduser(cwbar.config.MVN) + " -q -T1.0C -f " + pom + " " + args, env=env)
 
     def build(self, only_this, clean, quick, full_distribution):
         if only_this:
