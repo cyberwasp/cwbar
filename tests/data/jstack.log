@@ -1,0 +1,89 @@
+297616:
+2024-12-09 11:20:33
+Full thread dump OpenJDK 64-Bit Server VM (11.0.24+9-LTS mixed mode, sharing):
+
+Threads class SMR info:
+_java_thread_list=0x0000635eaeb378a0, length=136, elements={
+0x0000635ea8344800, 0x0000635ea8348000, 0x0000635ea8358800, 0x0000635ea835b000,
+0x0000635ea835e800, 0x0000635ea8361800, 0x0000635ea836d000, 0x0000635ea8471000,
+0x0000635ea895e800, 0x0000635ea89a8800, 0x0000635ea8a91000, 0x0000635ea9485800,
+0x0000635eab256000, 0x0000635eab7d9800, 0x0000635eab58c000, 0x0000635eab75b800,
+0x0000635eab28a000, 0x0000635eaaa09000, 0x0000635eaa71b000, 0x0000635eaa71e000,
+0x0000635ea76bd000, 0x0000635eaabab000, 0x0000635eaeb3b800, 0x0000635eab8dc800,
+0x0000635eaec79000, 0x0000635eaecd2000, 0x0000635eaa32d000, 0x0000635eaa37d000,
+0x0000635eab659000, 0x0000635eadb67800, 0x0000635ead7ed000, 0x0000635ead808000,
+0x0000635ead80b800, 0x0000635ead80f000, 0x0000635ead811800, 0x0000635ead815000,
+0x0000635ead817800, 0x0000635ead81b800, 0x0000635ead388000, 0x0000635eab85a000,
+0x0000635eaaebb000, 0x0000635eaaebd000, 0x0000635eac829800, 0x0000635eac82a800,
+0x0000635ead36a000, 0x0000635eae1bf000, 0x0000635eb2d62800, 0x0000635eafc74000,
+0x0000635eafc75800, 0x0000635eafca5000, 0x0000635eb10cc800, 0x0000635eac7f9000,
+0x0000635eb12ad800, 0x0000635eb12ac800, 0x0000635eb26a1800, 0x0000635eb287e000,
+0x0000635eb2bae000, 0x0000635eb3271000, 0x0000635eaffd9000, 0x0000635eb3933000,
+0x0000635eaffce800, 0x0000635eb30ee800, 0x0000635eb317c800, 0x0000635eb2f1b800,
+0x0000635eb3e04800, 0x0000635eb3dff000, 0x0000635eb3e01800, 0x0000635eb5817800,
+0x0000635eb47ec800, 0x0000635eb5030000, 0x0000635eb563d800, 0x0000635eb5011800,
+0x0000635eb527a000, 0x0000635eb42b4000, 0x0000635eb482b800, 0x0000635eb51de800,
+0x0000635eb53c5000, 0x0000635eaf341800, 0x0000635eaaf04800, 0x0000635eaaf05000,
+0x0000635eb084f000, 0x0000635eb1f8f000, 0x0000635eadc9b000, 0x0000635eaf7fa800,
+0x0000635ead838800, 0x0000635eb6019800, 0x0000635eacfde000, 0x0000635eb8c4c000,
+0x0000635ebfb31000, 0x0000635eb959f800, 0x0000635eb95a1000, 0x0000635ebfd84000,
+0x0000635ebfd85800, 0x0000635ec05f0000, 0x0000635eb8c8d800, 0x0000635eb8c8f000,
+0x0000635eb8c91000, 0x0000635ec6b4c000, 0x0000635ebe19a000, 0x0000635ebf836000,
+0x0000635ebbb9e800, 0x0000635eb757d800, 0x0000635eb95a3800, 0x0000635ebd972800,
+0x0000635eb82e8000, 0x0000635eb2794800, 0x0000635eab810800, 0x0000635eb683f000,
+0x0000635ebd608800, 0x0000635eb65ab000, 0x0000635ec3aad000, 0x0000635ec0deb800,
+0x0000635eb9e4f000, 0x0000635eaab78800, 0x0000635eaa20a800, 0x0000635ebc649000,
+0x0000635eb0128800, 0x0000635eb757f000, 0x0000635ebaf30000, 0x0000635ec3aac800,
+0x0000635eb6401800, 0x0000635eb6255000, 0x0000635ebd5f0800, 0x0000635eb874c000,
+0x0000635eb9cf5000, 0x0000635ebfb28800, 0x0000635eaab8e800, 0x0000635eaec10000,
+0x0000635eb64ff000, 0x0000635eab482800, 0x0000635eaa5c1000, 0x0000635eaf0de800,
+0x0000635ec6ab7800, 0x0000635eaa4a2000, 0x0000635eb0126800, 0x0000635eb4370000
+}
+
+"Reference Handler" #2 daemon prio=10 os_prio=0 cpu=74,98ms elapsed=238349,24s tid=0x0000635ea8344800 nid=0x48a98 waiting on condition  [0x0000715dc49fc000]
+   java.lang.Thread.State: RUNNABLE
+	at java.lang.ref.Reference.waitForReferencePendingList(java.base@11.0.24/Native Method)
+	at java.lang.ref.Reference.processPendingReferences(java.base@11.0.24/Reference.java:241)
+	at java.lang.ref.Reference$ReferenceHandler.run(java.base@11.0.24/Reference.java:213)
+
+"Finalizer" #3 daemon prio=8 os_prio=0 cpu=32,49ms elapsed=238349,24s tid=0x0000635ea8348000 nid=0x48a99 in Object.wait()  [0x0000715dc45fe000]
+   java.lang.Thread.State: WAITING (on object monitor)
+	at java.lang.Object.wait(java.base@11.0.24/Native Method)
+	- waiting on <no object reference available>
+	at java.lang.ref.ReferenceQueue.remove(java.base@11.0.24/ReferenceQueue.java:155)
+	- waiting to re-lock in wait() <0x0000000680800af8> (a java.lang.ref.ReferenceQueue$Lock)
+	at java.lang.ref.ReferenceQueue.remove(java.base@11.0.24/ReferenceQueue.java:176)
+	at java.lang.ref.Finalizer$FinalizerThread.run(java.base@11.0.24/Finalizer.java:170)
+
+"Signal Dispatcher" #4 daemon prio=9 os_prio=0 cpu=0,42ms elapsed=238349,24s tid=0x0000635ea8358800 nid=0x48a9a runnable  [0x0000000000000000]
+   java.lang.Thread.State: RUNNABLE
+
+"Service Thread" #5 daemon prio=9 os_prio=0 cpu=75,52ms elapsed=238349,24s tid=0x0000635ea835b000 nid=0x48a9b runnable  [0x0000000000000000]
+   java.lang.Thread.State: RUNNABLE
+
+"C2 CompilerThread0" #6 daemon prio=9 os_prio=0 cpu=163428,54ms elapsed=238349,24s tid=0x0000635ea835e800 nid=0x48a9c waiting on condition  [0x0000000000000000]
+   java.lang.Thread.State: RUNNABLE
+   No compile task
+
+"C1 CompilerThread0" #8 daemon prio=9 os_prio=0 cpu=19638,38ms elapsed=238349,24s tid=0x0000635ea8361800 nid=0x48a9d waiting on condition  [0x0000000000000000]
+   java.lang.Thread.State: RUNNABLE
+   No compile task
+
+"Sweeper thread" #9 daemon prio=9 os_prio=0 cpu=766,70ms elapsed=238349,24s tid=0x0000635ea836d000 nid=0x48a9e runnable  [0x0000000000000000]
+   java.lang.Thread.State: RUNNABLE
+
+"Common-Cleaner" #10 daemon prio=8 os_prio=0 cpu=97,50ms elapsed=238349,22s tid=0x0000635ea8471000 nid=0x48a9f in Object.wait()  [0x0000715d997fe000]
+   java.lang.Thread.State: TIMED_WAITING (on object monitor)
+	at java.lang.Object.wait(java.base@11.0.24/Native Method)
+	- waiting on <no object reference available>
+	at java.lang.ref.ReferenceQueue.remove(java.base@11.0.24/ReferenceQueue.java:155)
+	- waiting to re-lock in wait() <0x00000006808012b8> (a java.lang.ref.ReferenceQueue$Lock)
+	at jdk.internal.ref.CleanerImpl.run(java.base@11.0.24/CleanerImpl.java:148)
+	at java.lang.Thread.run(java.base@11.0.24/Thread.java:829)
+	at jdk.internal.misc.InnocuousThread.run(java.base@11.0.24/InnocuousThread.java:161)
+
+"G1 Young RemSet Sampling" os_prio=0 cpu=209661,11ms elapsed=238349,25s tid=0x0000635ea8292800 nid=0x48a96 runnable  
+"VM Periodic Task Thread" os_prio=0 cpu=97400,08ms elapsed=238348,82s tid=0x0000635ea89b6800 nid=0x48aa3 waiting on condition  
+
+JNI global refs: 174, weak refs: 44
+

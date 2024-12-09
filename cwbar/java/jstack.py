@@ -187,6 +187,8 @@ class JStack:
             stack_traces_lines = cwbar.java.jcmd.thread_print(pid).split("\n\n")[1:-2]
         filter_lambda = build_filter_lambda(filter_string)
         for stack_trace_lines in stack_traces_lines:
+            if "Threads class SMR info" in stack_trace_lines:
+                continue
             stack_trace = StackTrace(stack_trace_lines.split("\n"))
             if filter_lambda(stack_trace):
                 self.stack_traces_dict[stack_trace.tid] = stack_trace
