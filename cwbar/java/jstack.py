@@ -46,8 +46,6 @@ class StackTrace:
             tags.append("simple-control")
         if self.contains_any("NakedJavaScriptEngine"):
             tags.append("js")
-        if self.contains_any("getSettings"):
-            tags.append("settings")
         if self.contains_any('-default-'):
             tags.append("reports-in-default")
         if self.contains_any("getPermissionCollection"):
@@ -58,30 +56,85 @@ class StackTrace:
             tags.append("data-session-cache-filter")
         if self.contains_any("SignatureController"):
             tags.append("sign")
-        if self.contains_any("socketRead0"):
-            tags.append("socket-read")
-        if self.contains_any("ExecOperationLoggerDataSession"):
+        if self.contains_any("ExecOperationLoggerDataSession") or self.contains_any("OperationExecutionController"):
             tags.append("operation-log-write-db")
         if self.contains_any("updatePresetById"):
             tags.append("preset-write-db")
+        if self.contains_any("ru.krista.retools.gui.components.parampanel.controller.PresetSource.saveLastUsedFilter"):
+            tags.append("preset-report-write-db")
         if self.contains_any("marshalling"):
             tags.append("marshalling")
         if self.contains_any("GridServlet"):
             tags.append("grid")
-        if self.contains_any("GridServlet.processLoad"):
-            tags.append("grid-load")
+        if self.contains_any("ru.krista.core.server.web.application.servlets.JsonBeanServlet"):
+            tags.append("json-bean")
         if self.contains_any("JsonInterfaceServlet"):
             tags.append("form-open")
-        if self.contains_any("Hashtable.get"):
-            tags.append("hashtable-get")
-        if self.contains_any("QueryExecutorImpl.execute"):
-            tags.append("exec-sql")
-        if self.contains_any("CheckValidConnectionSQL.isValidConnection"):
-            tags.append("db-connection-check")
-        if self.contains_any("mcp.Semaphore.tryAcquire"):
-            tags.append("db-connection-waiting")
+        if self.contains_any("javax.security.auth.login.LoginContext"):
+            tags.append("login")
+        if self.contains_any("ru.krista.retools.reporting.ReportController.execute") and \
+                self.contains_any("ru.krista.retools.reporting.ReportController.execute"):
+            tags.append("report-wait-result")
+        if self.contains_any("ru.krista.retools.reporting.ReportController.innerExecute"):
+            tags.append("report-execute")
+        if self.contains_any("KrReportController.convertXlsxDownloadTo"):
+            tags.append("convert_xls")
+        if self.contains_any(" ru.krista.retools.dev.mon."):
+            tags.append("mon")
+        if self.contains_any("ru.krista.retools.docstate.TaskNotificationService"):
+            tags.append("task-notif")
+        if self.contains_any("ru.krista.retools.statemanager.SmTaskController.createTasks"):
+            tags.append("task-create")
+        if self.contains_any("ru.krista.retools.servlets.RetoolsTaskInfoServlet"):
+            tags.append("task-info")
+        if self.contains_any("ru.krista.retools.dictionary.RelevantSortStoreImpl"):
+            tags.append("relevant-sort")
+        if self.contains_any("ru.krista.core.server.web.application.servlets.LoginServlet"):
+            tags.append("login-servlet")
+        if self.contains_any("ru.krista.core.server.web.application.servlets.AutocompleteServlet"):
+            tags.append("autocomplete")
+        if self.contains_any("ru.krista.retools.login.RetoolsUserManager"):
+            tags.append("saml")
+        if self.contains_any("ru.krista.retools.settings.services.StorageEngineImpl.loadParams"):
+            tags.append("settings-load")
+        if self.contains_any("ru.krista.core.server.web.application.servlets.StateHandlerServlet"):
+            tags.append("form-settings")
+        if self.contains_any("ru.krista.retools.rest.formhistory_service.RetoolsFormHistory.getHistoryList"):
+            tags.append("form-history")
+        if self.contains_any("ru.krista.rebudget.exchange.servlet.ElDocDownload"):
+            tags.append("exchange")
+        if self.contains_any("ru.krista.retools.controllers.PrintDocumentControllerWeb"):
+            tags.append("print-doc")
+        if self.contains_any("ru.krista.retools.dataprovider.reporttree.ReportWorkplaceProviderTree"):
+            tags.append("report-tree")
+        if self.contains_any("ru.krista.retools.controllers.ContextMenuController"):
+            tags.append("context-menu")
+        if self.contains_any("ru.krista.retools.statemanager.StateManagerControllerWeb"):
+            tags.append("state")
+        if self.contains_any("ru.krista.retools.chat.ChatController"):
+            tags.append("chat")
+        if self.contains_any("ru.krista.retools.servlets.CloneServlet"):
+            tags.append("clone")
+        if self.contains_any("ru.krista.retools.security.lock.RightInfoLockProvider.calcLocks"):
+            tags.append("locks-calc")
+        if self.contains_any("ru.krista.retools.gui.forms.admin.ActiveSessionCloseTimer"):
+            tags.append("timer-close-session")
+        if self.contains_any("ru.krista.retools.controllers.ControlDocumentsControllerServer"):
+            tags.append("control")
+        if self.contains_any("ru.krista.rebudget.treasury.controllers.FormatRegionImpl") or \
+                self.contains_any("ru.krista.rebudget.system.controllers.FormatRegionController"):
+            tags.append("format-region")
+        if self.contains_any("ru.krista.retools.controllers.GenerateDocumentsController"):
+            tags.append("generation")
+        if self.contains_any("ru.krista.retools.gui.plugins.system.BlankPlugin"):
+            tags.append("blank")
+        if self.contains_any("ru.krista.retools.notification.NotificationControllerWeb"):
+            tags.append("web-notif")
+        if self.contains_any("ru.krista.core.server.web.application.servlets.PanelServlet"):
+            tags.append("panel")
         if not tags:
             tags.append("unknown")
+
 
         # системные теги
         if len(self.lines) > 1 and "RUNNABLE" in self.lines[1]:
@@ -92,6 +145,16 @@ class StackTrace:
             tags.append("krista")
         if self.contains_any(".ejb3.", ".callTimeout"):
             tags.append("ejb")
+        if self.contains_any("Hashtable.get"):
+            tags.append("hashtable-get")
+        if self.contains_any("QueryExecutorImpl.execute"):
+            tags.append("sql")
+        if self.contains_any("CheckValidConnectionSQL.isValidConnection"):
+            tags.append("db-connection-check")
+        if self.contains_any("mcp.Semaphore.tryAcquire"):
+            tags.append("db-connection-waiting")
+        if self.contains_any("socketRead0"):
+            tags.append("socket-read")
 
         return tags
 
@@ -111,7 +174,7 @@ class StackTrace:
         return len(set(self.tags).intersection(set(values))) == len(values)
 
     def __str__(self) -> str:
-        return "TAGS: " + ", ".join(self.tags) + "\n" + "\n".join(self.lines)
+        return "TAGS: " + ", ".join(sorted(self.tags)) + "\n" + "\n".join(self.lines)
 
 
 class JStack:
