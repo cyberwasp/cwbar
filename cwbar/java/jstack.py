@@ -48,8 +48,6 @@ class StackTrace:
             tags.append("js")
         if self.contains_any('-default-'):
             tags.append("reports-in-default")
-        if self.contains_any("getPermissionCollection"):
-            tags.append("permissions")
         if self.contains_any("executeScenarios"):
             tags.append("scenario")
         if self.contains_any("DataSessionCacheImpl$CacheNode.filter"):
@@ -132,6 +130,15 @@ class StackTrace:
             tags.append("web-notif")
         if self.contains_any("ru.krista.core.server.web.application.servlets.PanelServlet"):
             tags.append("panel")
+        if self.contains_any("RetoolsNewsService.getNewsList"):
+            tags.append("news")
+        if self.contains_any("ru.krista.rebudget.services.RKS"):
+            tags.append("rks")
+        if self.contains_any("ReportControllerWeb.selectReport"):
+            tags.append("select-report")
+        if self.contains_any(".RightInfoManagerBean.refreshSource"):
+            tags.append("permission-refresh")            
+
         if not tags:
             tags.append("unknown")
 
@@ -151,10 +158,16 @@ class StackTrace:
             tags.append("sql")
         if self.contains_any("CheckValidConnectionSQL.isValidConnection"):
             tags.append("db-connection-check")
-        if self.contains_any("mcp.Semaphore.tryAcquire"):
+        if self.contains_any("api.Semaphore.tryAcquire") and self.contains_any("datasources.WildFlyDataSource.getConnection"):
             tags.append("db-connection-waiting")
         if self.contains_any("socketRead0"):
             tags.append("socket-read")
+        if self.contains_any("getPermissionCollection"):
+            tags.append("permissions")
+        if self.contains_any("PooledOptimizer.generate"):
+            tags.append("id-pool")        
+        if self.contains_any(".FacadeEjb."):
+            tags.append("facade-ejb")
 
         return tags
 
