@@ -1,6 +1,7 @@
 import datetime
 import glob
 import os
+import pathlib
 import re
 
 import colorama
@@ -28,9 +29,18 @@ def comment(descr):
             global level
             level += 1
             sp = (level - 1) * 2 * " "
-            print(f"{sp}{colorama.Fore.GREEN}begin {descr.lower()} {args[0].type} {colorama.Style.RESET_ALL}")
+            print(f"{sp}{colorama.Fore.GREEN}begin {descr.lower()} {args[0].type} [{args[0].name}] {colorama.Style.RESET_ALL}")
             start = datetime.datetime.now()
-            func(*args, **kwargs)
+            self = args[0]
+            if self.is_cluster():
+                for server in self.servers(node_name=kwargs.get("node")):
+                    print(f"{sp}{colorama.Fore.GREEN}node {server.name} {colorama.Style.RESET_ALL}")
+                    args = (server,) + args[1:];
+                    if "node" in kwargs:
+                        del kwargs["node"]
+                    func(*args, **kwargs)
+            else:
+                func(*args, **kwargs);
             end = datetime.datetime.now()
             diff = (end - start).total_seconds()
             print(f"{sp}{colorama.Fore.GREEN}end {descr.lower()} {str(end)[:19]} [{diff}s]{colorama.Style.RESET_ALL}")
@@ -53,6 +63,13 @@ class Server:
             return os.path.join(cwbar.config.BASE_COMPILE, self.name)
         else:
             return os.path.realpath(os.path.join(cwbar.config.BASE_COMPILE, self.name))
+
+    def is_cluster(self):
+        return os.path.exists(os.path.join(self.get_server_dir(), os.path.join("generated-cluster.yaml")))
+ 
+    def servers(self, node_name=None):
+        return [Server(self.type, os.path.join(self.name, node.name), self.ssh) 
+                        for node in pathlib.Path(self.get_server_dir()).glob('node*') if not node_name or node.name.endswith(node_name) ]
 
     def get_props_file_name(self):
         return os.path.join(self.get_server_dir(), "jboss.properties")
@@ -173,21 +190,6 @@ class Server:
         project = self.sp()
         server = self.wf()
         server.deploy(project, full, deployments)
-
-    @comment("Deploy domain")
-    def ddeploy(self, full=False, deployments=None):
-        project = self.sp()
-        server = self.wf()
-        server.ddeploy(project, full, deployments)
-
-    @comment("Starting domain")
-    def dstart(self):
-        self.wf().dstart()
-
-    def pid(self):
-        pids = list(self.wf().get_servers_pids(verbose=False))
-        if pids:
-            print(pids[0])
 
     @comment("psql")
     def sql(self):

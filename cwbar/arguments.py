@@ -24,12 +24,17 @@ class Arguments:
         self._command_index = args.index(self._raw_command)
         self._server_type = os.environ.get("SERVER_TYPE")
         self._server_type = self._server_type if self._server_type else os.path.basename(args[0])
+        self._server_name = os.environ.get("SERVER_NAME")
+        self._server_name = self._server_name if self._server_name else os.path.basename(args[0])        
         self._server_kwargs = _args_to_kwargs(args[1:self._command_index])
         self._command_args = args[self._command_index + 1:]
         self._command_kwargs = _args_to_kwargs(args[self._command_index + 1:])
 
     def server_type(self):
         return self._server_type
+    
+    def server_name(self):
+        return self._server_name
 
     def server_kwargs(self):
         return self._server_kwargs

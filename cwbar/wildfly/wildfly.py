@@ -88,15 +88,6 @@ class Wildfly:
                 print("Copy " + target)
                 shutil.copy(target, deployment_dir)
 
-    def ddeploy(self, project, full, project_names):
-        targets = project.get_distribution_project_targets(full)
-        for target in targets:
-            if len(project_names) == 0 or os.path.basename(target).split(".")[0] in project_names:
-                self.cli("-c", "--command=\"deploy --force " + target + "\"")
-
-    def dstart(self):
-        cwbar.cmd.execute(os.path.join(self._home_dir, "bin", "domain.sh"))
-
     def start(self, prod=False):
         props = self.properties
         cmd = os.path.join(self._home_dir, "bin", "standalone.bat" if os.name == "nt" else "standalone.sh")
