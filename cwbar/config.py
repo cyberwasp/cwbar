@@ -1,9 +1,9 @@
 JAVA_HOMES = {}
 BASE_SOURCES = "~/Krista/sources"
 BASE_COMPILE = "/var/lib/jboss"
-MVN = "~/Apps/mvn/bin/mvn"
-JAVA_HOMES[8] = "~/SDK/java/jdk8"
-JAVA_HOMES[11] = "~/SDK/java/jdk11"
+MVN = "~/Apps/mvn/current/bin/mvn"
+JAVA_HOMES[8] = "~/Apps/java/jdk8"
+JAVA_HOMES[11] = "~/Apps/java/jdk11"
 JAVA_HOME = JAVA_HOMES[min(JAVA_HOMES.keys())]
 PG_PASS = "~/.pgpass"
 PSQL = 'psql'
