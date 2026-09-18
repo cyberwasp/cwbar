@@ -20,16 +20,26 @@ class DataSourceConfig:
         self.node.find("{*}connection-url").text = value
 
     def get_user(self):
-        return self.node.find("{*}security/{*}user-name").text
+        user_name_node = self.node.find("{*}security//{*}user-name")
+        return user_name_node.text if user_name_node else self.node.find("{*}security").attrib["user-name"]
 
     def set_user(self, value):
-        self.node.find("{*}security/{*}user-name").text = value
+        user_name_node = self.node.find("{*}security//{*}user-name")
+        if user_name_node:
+            user_name_node.text = value
+        else:
+            self.node.find("{*}security").attrib["user-name"] = value
 
     def get_password(self):
-        return self.node.find("{*}security/{*}password").text
+        password = self.node.find("{*}security//{*}password")
+        return password.text if password else self.node.find("{*}security").attrib["password"]
 
     def set_password(self, value):
-        self.node.find("{*}security/{*}password").text = value
+        user_name_node = self.node.find("{*}security//{*}password")
+        if user_name_node:
+            user_name_node.text = value
+        else:
+            self.node.find("{*}security").attrib["password"] = value
 
     def get_driver(self):
         return self.node.find("{*}driver").text
