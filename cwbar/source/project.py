@@ -126,7 +126,7 @@ class SourceProject:
     def get_distribution_projects(self, full_distribution):
         minimum_set = {"application", "middleware", "login", "api"}
         pattern = self.config.dist_pattern
-        pattern = os.path.join(pattern) if pattern else os.path.join("*", "distribution*", "**", "pom.xml")
+        pattern = os.path.join(*pattern) if pattern else os.path.join("*", "distribution*", "**", "pom.xml")
         pattern = os.path.join(self.get_source_dir(),  pattern)
         for pom in glob.glob(pattern, recursive=True):
             pom_dir = os.path.basename(os.path.dirname(pom))
@@ -163,6 +163,8 @@ class SourceProject:
             return ["selenium-tests"]
         elif self.name == "fkc":
             return ["fkc-it", "fkc/integration/puot-client", "javister"]
+        elif self.name == "common-utils":
+            return ["it", "sessionagent"]
         else:
             return []
 
